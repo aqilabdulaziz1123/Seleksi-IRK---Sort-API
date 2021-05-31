@@ -3,3 +3,4 @@
 
 # Test folder
 test/
+*pycache*/

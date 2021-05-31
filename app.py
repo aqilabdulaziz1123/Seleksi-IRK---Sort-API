@@ -1,34 +1,25 @@
 # imports
 from flask import Flask, request, make_response
-import mysql.connector
-from decouple import config
+from werkzeug.datastructures import ImmutableMultiDict
+from script.selection_sort import selection
+from script.database import convertHTMLTable,insert
 import json
 
 # initializing Flask app
 app = Flask(__name__)
 
-# database credentials
-DBPASS = config('DB_PASS')
-DBNAME = config('DB_NAME')
-DBHOST = config('DB_HOST')
-DBUSER = config('DB_USER')
-
-# mydb = mysql.connector.connect(
-#   host=DBHOST,
-#   user=DBUSER,
-#   password=DBPASS,
-#   database=DBNAME
-# )
-
-# mycursor = mydb.cursor()
-
 @app.route('/sort/selection', methods =['POST'])
 def sort():
-	message = request.get_json(force=True)
-	csvFile = message['file']
-	idColumn = message['id']
-	order = message['order']
+	message = request.args.to_dict(flat=True)
+	csvFile = request.files['file']
 	
-	return order
+	print(message)
+	sortTable, execTime = selection(csvFile,int(message['id']),message['order'])
 
-app.run(debug=True)
+	print(execTime)
+	insert("Selection Sort",sortTable,csvFile,execTime)
+
+	return convertHTMLTable(sortTable)
+
+if __name__ == "__main__":
+	app.run(debug=True)
