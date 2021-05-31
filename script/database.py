@@ -39,14 +39,17 @@ def select(id):
         query += "WHERE id=" + str(id)
     query += " LIMIT 1"
 
+    print(query)
     mycursor.execute(query)
     data = mycursor.fetchone()
-    data = data[0].replace('(',"").replace(')',"")
-    table = data.split(';')
-    for i in range(len(table)):
-        table[i] = table[i].split(',')
-
-    return convertHTMLTable(table)
+    if data != None:
+        data = data[0].replace('(',"").replace(')',"")
+        table = data.split(';')
+        for i in range(len(table)):
+            table[i] = table[i].split(',')
+        return convertHTMLTable(table)
+    else:
+        return {'Error':"Data doesn't exist!"}
 
 def insert(algoritma,hasil,file,execTime):
     # database credentials
