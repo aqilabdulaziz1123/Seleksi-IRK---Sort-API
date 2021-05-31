@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block head %}
+<title>Main page</title>
+{% endblock head %} {% block content %}
+<p>{{ type }}</p>
+<form action="#" name="test" method="POST">
+  <input type="text" name="user" />
+  <input type="submit" value="submit" />
+</form>
+{% endblock content %}
