@@ -1,7 +1,13 @@
 from flask import Flask, render_template, redirect, request, url_for
-# from flask.helpers import url_for
 
+from sorts import Sorter
 from utility import INSERT, GET_CONTENT
+
+selection_sort = Sorter.selection
+insertion_sort = Sorter.insertion
+merge_sort = Sorter.merge
+quick_sort = Sorter.quick
+bubble_sort = Sorter.bubble
 
 app = Flask(__name__)
 
@@ -18,7 +24,7 @@ def sort(type):
         user = request.form["user"]
         return redirect(url_for("result", name=user))
 
-@app.route("/sort/result/<name>")
+@app.route("/sort/result/<name>", methods=["GET"])
 def result(name):
     return render_template('result.html', name=name)
 
