@@ -7,6 +7,37 @@ def is_int(s):
     except ValueError:
         return False
 
+def configureInput(inputFile, idColumn):
+    data = []
+    column = []
+    stream = io.StringIO(inputFile.stream.read().decode("UTF8"), newline=None)
+    csv_input = csv.reader(stream)
+    for row in csv_input:
+        data.append(row)
+
+    first = True
+    second = True
+    intType = True
+    removedRow = []
+    for row in data:
+        if first:
+            first = False
+            continue
+        elif not first and second:
+            intType = is_int(row[idColumn])
+            second = False
+
+        if intType ^ is_int(row[idColumn]):
+            removedRow.append(row)
+            continue
+
+        column.append(int(row[idColumn]) if intType else row[idColumn].lower())
+
+    for row in removedRow:
+        data.remove(row)
+    
+    return data, column
+
 def selection(inputFile, idColumn, order):
     def comparable(input, asc):
         if asc :
@@ -15,42 +46,13 @@ def selection(inputFile, idColumn, order):
             return max(input)
 
     start = time.time()
-
-    data = []
-    column = []
-    stream = io.StringIO(inputFile.stream.read().decode("UTF8"), newline=None)
-    csv_input = csv.reader(stream)
-    for row in csv_input:
-        data.append(row)
     asc = order=="ASC"
 
-    first = True
-    second = True
-    intType = True
-    removedRow = []
-    for row in data:
-        if first:
-            first = False
-            continue
-        elif not first and second:
-            intType = is_int(row[idColumn])
-            second = False
-
-        if intType ^ is_int(row[idColumn]):
-            removedRow.append(row)
-            continue
-
-        column.append(int(row[idColumn]) if intType else row[idColumn].lower())
-
-    for row in removedRow:
-        data.remove(row)
-
-    # print(column)
+    data, column = configureInput(inputFile, idColumn)
+    print(len(column),len(data))
+    
     for i in range(0,len(data)-1):
-        try:
-            idx = column.index(comparable(column[i:],asc))
-        except:
-            print(column[i])
+        idx = column[i:].index(comparable(column[i:],asc)) + i
         column[idx], column[i] = column[i], column[idx]
         data[i+1], data[idx+1] = data[idx+1], data[i+1]
     
@@ -58,37 +60,10 @@ def selection(inputFile, idColumn, order):
     return data, end-start
 
 def insertion(inputFile, idColumn, order):
+    comparable = lambda a,b : (a<b if order=="ASC" else a>b)
     start = time.time()
 
-    data = []
-    column = []
-    stream = io.StringIO(inputFile.stream.read().decode("UTF8"), newline=None)
-    csv_input = csv.reader(stream)
-    for row in csv_input:
-        data.append(row)
-
-    comparable = lambda a,b : (a<b if order=="ASC" else a>b)
-
-    first = True
-    second = True
-    intType = True
-    removedRow = []
-    for row in data:
-        if first:
-            first = False
-            continue
-        elif not first and second:
-            intType = is_int(row[idColumn])
-            second = False
-
-        if intType ^ is_int(row[idColumn]):
-            removedRow.append(row)
-            continue
-
-        column.append(int(row[idColumn]) if intType else row[idColumn].lower())
-
-    for row in removedRow:
-        data.remove(row)
+    data, column = configureInput(inputFile, idColumn)
 
     # print(column)
     print(len(column),len(data))
@@ -114,34 +89,7 @@ def bubble(inputFile, idColumn, order):
 
     start = time.time()
 
-    data = []
-    column = []
-    stream = io.StringIO(inputFile.stream.read().decode("UTF8"), newline=None)
-    csv_input = csv.reader(stream)
-    for row in csv_input:
-        data.append(row)
-    asc = order=="ASC"
-
-    first = True
-    second = True
-    intType = True
-    removedRow = []
-    for row in data:
-        if first:
-            first = False
-            continue
-        elif not first and second:
-            intType = is_int(row[idColumn])
-            second = False
-
-        if intType ^ is_int(row[idColumn]):
-            removedRow.append(row)
-            continue
-
-        column.append(int(row[idColumn]) if intType else row[idColumn].lower())
-
-    for row in removedRow:
-        data.remove(row)
+    data, column = configureInput(inputFile, idColumn)
 
     # print(column)
     n = len(data)
