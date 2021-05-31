@@ -17,6 +17,37 @@ def convertHTMLTable(input):
 
 	return html + "</tbody>\n</table>"
 
+def select(id):
+    DBPASS = config('DB_PASS')
+    DBNAME = config('DB_NAME')
+    DBHOST = config('DB_HOST')
+    DBUSER = config('DB_USER')
+
+    mydb = mysql.connector.connect(
+      host=DBHOST,
+      user=DBUSER,
+      password=DBPASS,
+      database=DBNAME
+    )
+    mycursor = mydb.cursor()
+
+    query = "SELECT hasil_sorting FROM sorts "
+
+    if (int(id)<0):
+        query += "ORDER BY time DESC"
+    else:
+        query += "WHERE id=" + str(id)
+    query += " LIMIT 1"
+
+    mycursor.execute(query)
+    data = mycursor.fetchone()
+    data = data[0].replace('(',"").replace(')',"")
+    table = data.split(';')
+    for i in range(len(table)):
+        table[i] = table[i].split(',')
+
+    return convertHTMLTable(table)
+
 def insert(algoritma,hasil,file,execTime):
     # database credentials
     DBPASS = config('DB_PASS')
@@ -38,10 +69,10 @@ def insert(algoritma,hasil,file,execTime):
         if first:
             first = False
         else :
-            temp += ','
+            temp += ';'
         temp += "(" + ','.join(map(str,row)) +")"
     temp += ")"
-    temp = "'" + temp.replace("'","\\'").replace('"','\\"') + "'"
+    temp = "'" + temp.replace('\\',"\\\\").replace("'","\\'").replace('"','\\"') + "'"
     # print(test)
 
     query = "INSERT INTO sorts (algoritma,hasil_sorting,execution_time) VALUES ({0},{1},{2})".format('\''+algoritma+'\'',temp,execTime)
@@ -51,5 +82,6 @@ def insert(algoritma,hasil,file,execTime):
     mydb.commit()
 
 if __name__ == "__main__":
-    test = "ini' test aja sebenernya" +'"'
-    print(test.replace("'","\\'").replace('"','\\"'))
+    # test = "\\x02\\23"
+    # print(test.replace('\\',"\\\\").replace("'","\\'").replace('"','\\"'))
+    print(select("2"))

@@ -2,7 +2,7 @@
 from flask import Flask, request, make_response
 from werkzeug.datastructures import ImmutableMultiDict
 from script.selection_sort import selection
-from script.database import convertHTMLTable,insert
+from script.database import convertHTMLTable,insert,select
 import json
 
 # initializing Flask app
@@ -21,5 +21,12 @@ def sort():
 
 	return convertHTMLTable(sortTable)
 
+@app.route('/sort/result', methods =['GET'])
+def getTable():
+	message = request.args.to_dict(flat=True)
+	id = message['id'] if message['id'] != None else -1
+	
+	return select(id)
+
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run()
