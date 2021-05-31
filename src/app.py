@@ -1,10 +1,11 @@
-from logging import debug
-from flask import Flask, render_template, redirect, request
-from flask.helpers import url_for
+from flask import Flask, render_template, redirect, request, url_for
+# from flask.helpers import url_for
+
+from utility import INSERT, GET_CONTENT
 
 app = Flask(__name__)
 
-@app.route("/", methods=["POST", "GET"])
+@app.route("/")
 def home():
     return redirect(url_for("sort", type="selection"))
 #    return render_template('home.html')

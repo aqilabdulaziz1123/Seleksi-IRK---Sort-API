@@ -1,0 +1,6 @@
+CD src
+ECHO Installing requirements...
+pip install -r requirements.txt
+ECHO Setup completed. Running app...
+CD ..
+CALL run
