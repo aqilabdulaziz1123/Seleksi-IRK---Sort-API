@@ -51,6 +51,8 @@ def select(id):
     else:
         return {'Error':"Data doesn't exist!"}
 
+    mydb.close()
+
 def insert(algoritma,hasil,file,execTime):
     # database credentials
     DBPASS = config('DB_PASS')
@@ -83,6 +85,7 @@ def insert(algoritma,hasil,file,execTime):
     # print(query)
     mycursor.execute(query)
     mydb.commit()
+    mydb.close()
 
 if __name__ == "__main__":
     # test = "\\x02\\23"

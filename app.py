@@ -51,8 +51,10 @@ def selection_sort():
 	current_user = get_jwt_identity()
 
 	print(message)
-	sortTable, execTime = selection(csvFile,int(message['id']),message['order'])
-
+	try:
+		sortTable, execTime = selection(csvFile,int(message['id']),message['order'])
+	except:
+		return jsonify(Error="Index Invalid!")
 	print(execTime)
 	insert("Selection Sort",sortTable,csvFile,execTime)
 
@@ -67,8 +69,10 @@ def insertion_sort():
 	current_user = get_jwt_identity()
 
 	print(message)
-	sortTable, execTime = insertion(csvFile,int(message['id']),message['order'])
-
+	try:
+		sortTable, execTime = insertion(csvFile,int(message['id']),message['order'])
+	except:
+		return jsonify(Error="Index Invalid!")
 	print(execTime)
 	insert("Insertion Sort",sortTable,csvFile,execTime)
 
@@ -83,8 +87,10 @@ def bubble_sort():
 	current_user = get_jwt_identity()
 
 	print(message)
-	sortTable, execTime = bubble(csvFile,int(message['id']),message['order'])
-
+	try:
+		sortTable, execTime = bubble(csvFile,int(message['id']),message['order'])
+	except:
+		return jsonify(Error="Index Invalid!")
 	print(execTime)
 	insert("Bubble Sort",sortTable,csvFile,execTime)
 
