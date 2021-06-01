@@ -9,7 +9,7 @@ pswd = os.environ.get("pass")
 
 secret = os.environ.get("secret")
 
-memoryauth = []
+memoryauth = set()
 
 def getloggedin():
     return memoryauth
@@ -18,7 +18,7 @@ def login(us, ps):
     if us == user:
         if ps == pswd:
             key = encode(user)
-            memoryauth.append(user)
+            memoryauth.add(user)
             return key
     return None
 

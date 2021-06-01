@@ -8,7 +8,7 @@ def validate(args):
 
   if "order" in args:  
     order = args["order"]
-    if order != "ASC" or order != "DESC":
+    if order != "ASC" and order != "DESC":
       return None, None, "Bad arguments (order should be ASC or DESC)"
   else:
     order = "ASC"
