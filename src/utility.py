@@ -16,7 +16,7 @@ def init():
 
     cursor.execute("CREATE DATABASE IF NOT EXISTS SortAPI")
     cursor.execute("USE SortAPI")
-    cursor.execute("CREATE TABLE IF NOT EXISTS sorts (ID INT AUTO_INCREMENT PRIMARY KEY, Waktu TIMESTAMP DEFAULT current_timestamp(), Algoritma VARCHAR(9) DEFAULT 'selection', Result BLOB, ExecutionTime DOUBLE)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS sorts (ID INT AUTO_INCREMENT PRIMARY KEY, Waktu TIMESTAMP DEFAULT current_timestamp(), Algoritma VARCHAR(9), Result BLOB, ExecutionTime DOUBLE, CHECK (Algoritma IN ('selection', 'bubble', 'merge')))")
 
 def insert(Result, ExecutionTime, Algoritma):
     database = mysql.connect(
@@ -28,13 +28,14 @@ def insert(Result, ExecutionTime, Algoritma):
     database.autocommit = True
     cursor = database.cursor()
 
-    query = "INSERT INTO sorts (Algoritma, Result, ExecutionTime) VALUES (?, ?, ?, ?)"
-    query_tuple = (Algoritma, Result, ExecutionTime)
-    cursor.execute(query, query_tuple)
+    Result = Result.replace("\r", "\\r").replace("\n", "\\n")
+    query = "INSERT INTO sorts (Algoritma, Result, ExecutionTime) VALUES ({0}, {1}, {2})".format("'" + Algoritma + "'", Result, ExecutionTime)
+#    query = query + "\'" + Algoritma + "\'" + "," + Result + "," + ExecutionTime + ")"
+    cursor.execute(query)
 
     print(cursor.rowcount, "record inserted.")
 
-def get_content(ID=-1):
+def get_content(ID):
     database = mysql.connect(
         host="localhost",
         user=os.getenv("MYSQL_USER"),
@@ -44,15 +45,22 @@ def get_content(ID=-1):
     database.autocommit = True
     cursor = database.cursor()
 
-    query = "SELECT Result FROM sorts "
+    query = "SELECT * FROM sorts "
     if(ID == -1):
         query = query + "ORDER BY ID DESC"
     else:
         query = query + "WHERE ID=" + str(ID)
+    query = query + " LIMIT 1"
     cursor.execute(query)
 
-    res = cursor.fetchone()
+    all_attributes = cursor.fetchone()
 
+    if all_attributes == None:
+        return convert_BLOB_to_list(all_attributes)
+        
+    (dummy, dummy, dummy, res, dummy) = all_attributes
+    result = convert_BLOB_to_list(res)
+    print(result)
     return convert_BLOB_to_list(res)
 
 
@@ -68,6 +76,7 @@ def preprocess(data, pivot):
     is_header = True
     is_first = True
     is_a_number = True
+    pivot = int(pivot)
 
     invalid_row = []
 
@@ -91,8 +100,7 @@ def preprocess(data, pivot):
     return data
 
 def convert_list_to_BLOB(data):
-    text = 'b"'
-    data = [['a', 'b', 'c'], [1, 2, 3], [4, 5, 6]]
+    text = '"'
 
     for i in range(len(data)):
         data[i] = ",".join(data[i])
@@ -133,10 +141,6 @@ def convert_BLOB_to_list(BLOB):
 def html_table(content):
     if content == []:
         return None
-
-    convert_body = lambda column : "<td>" + column + "</td>\n"
-    convert_header = lambda column : "<th>" + column + "</th>\n" 
-
     html = "<table>\n"
 
     is_header = True
@@ -144,9 +148,13 @@ def html_table(content):
         html = html + "<tr>\n"
         if(is_header):
             is_header = False
-            html = html + map(convert_header, row)
+            html = html + "<th>"
+            html = html + "</th><th>".join(row)
+            html = html + "</th>"
         else:
-            html = html + map(convert_body, row)
+            html = html + "<td>"
+            html = html + "</td><td>".join(row)
+            html = html + "</td>"
         html = html + "</tr>\n"
 
     html = html + "</table>"
