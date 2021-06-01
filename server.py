@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, Markup
+from py.auth import auth, login
 from py.sorter import sort, csvtostr, csvtohtml, strtocsv, listalgo
 from py.database import select, insert
 from py.util import validate
@@ -7,10 +8,24 @@ app = Flask(__name__, template_folder='public')
 
 @app.route('/')
 def indeks():
-  html, time = sort("username.csv", 2, "selection")
-  return str("%.5f"%time)
+  return "ok"
+
+@app.route("/auth/login", methods=["POST"])
+def loginpage():
+  args = request.form.to_dict()
+
+  if not ("username" in args and "password" in args):
+    return {"error": "bad argument, need username and password"}
+
+  authkey = login(args["username"], args["password"])
+
+  if authkey is None:
+    return {"error": "wrong username or password"}
+  
+  return {"auth_key": authkey}
 
 @app.route("/sort/result", methods=['GET'])
+@auth
 def result():
   id = request.args.get("id")
 
@@ -25,6 +40,7 @@ def result():
   return render_template("index.html", html=Markup(csvtohtml(strtocsv(data[3]))), time="%.5f"%data[4], algorithm=data[2])
 
 @app.route("/sort/<algo>", methods=['POST'])
+@auth
 def selection(algo):
   listalg = listalgo()
 

@@ -1,0 +1,45 @@
+import jwt
+import os
+from flask import Flask, request
+
+app = Flask(__name__)
+
+user = os.environ.get("user")
+pswd = os.environ.get("pass")
+
+secret = os.environ.get("secret")
+
+memoryauth = []
+
+def getloggedin():
+    return memoryauth
+
+def login(us, ps):
+    if us == user:
+        if ps == pswd:
+            key = encode(user)
+            memoryauth.append(user)
+            return key
+    return None
+
+def encode(user):
+    return jwt.encode({'user': user}, secret, algorithm='HS256')
+
+def decode(encoded):
+    return jwt.decode(encoded, secret, algorithms=['HS256'])
+
+def auth(next):
+    def wrapper():
+        if not ("AUTH" in request.headers):
+            return {"error": "auth header is required"}, 401
+        
+        key = request.headers["AUTH"]
+
+        decoded = decode(key)
+
+        if not("user" in decoded) or not (decoded["user"] in memoryauth):
+            return {"error": "bad key"}, 401
+
+        return next()
+    wrapper.__name__ = next.__name__
+    return wrapper
