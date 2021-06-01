@@ -1,20 +1,89 @@
+import time
+
 class Sorter:
     @staticmethod
-    def selection():
-        pass
+    def selection(data, pivot, order):
+        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
+        start = time.time_ns()
+        end = time.time_ns()
+
+        exec_time = (end - start) / 1000000000000
+        
+        return (data, exec_time)
 
     @staticmethod
-    def insertion():
-        pass
+    def insertion(data, pivot, order):
+        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
+        start = time.time_ns()
+        end = time.time_ns()
+
+        exec_time = (end - start) / 1000000000000
+        
+        return (data, exec_time)
 
     @staticmethod
-    def merge():
-        pass
+    def merger(data, left, mid, right, comparator):
+        result = []
+        for isi in data:
+            result.append(isi)
+            
+        p = left
+        q = mid + 1
+        r = left
+        while(p <= mid) and (q <= right):
+            if(comparator(data[p], data[q])):
+                result[r] = data[p]
+                p += 1
+            else:
+                result[r] = data[q]
+                q += 1
+
+            r += 1
+
+        while(p <= mid):
+            result[r] = data[p]
+            p += 1
+            r += 1
+
+        while(q <= right):
+            result[r] = data[q]
+            q += 1
+            r += 1
+
+        return result
 
     @staticmethod
-    def quick():
-        pass
+    def merge(data, pivot, order):
+        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
+        start = time.time_ns()
+        data = Sorter.merge(data, 0, len(data) - 1, compare)
+        end = time.time_ns()
+
+        exec_time = (end - start) / 1000000000000
+        return (data, exec_time)
 
     @staticmethod
-    def bubble():
-        pass
+    def merge(data, left, right, comparator):
+        if(left < right):
+            mid = (left + right) // 2
+            data = Sorter.merge(data, left, mid, comparator)
+            data = Sorter.merge(data, mid + 1, right, comparator)
+            data = Sorter.merger(data, left, mid, right, comparator)
+        return data
+
+    @staticmethod
+    def bubble(data, pivot, order):
+        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
+        start = time.time_ns()
+        n = len(data)
+        for i in range(1, n):
+            for j in range(1, n - i):
+                if compare(data[j - 1], data[j]):
+                    continue
+                (data[j - 1], data[j]) = (data[j], data[j - 1])
+
+        end = time.time_ns()
+
+        exec_time = (end - start) / 1000000000000
+        
+        return (data, exec_time)
