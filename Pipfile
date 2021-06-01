@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 python-decouple = "*"
 mysql-connector-python = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 
