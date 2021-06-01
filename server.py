@@ -49,9 +49,10 @@ def selection(algo):
 
   args = request.form.to_dict()
 
-  file = request.files["csv"]
-  if not file:
+  if not ("csv" in request.files):
     return {"error": "Bad arguments (there should be file [csv])"}
+    
+  file = request.files["csv"]
   
   col, order, err1 = validate(args)
   if err1 is not None:
