@@ -94,9 +94,12 @@ def selectionsort(arr, col, order = "ASC"):
 def bubblesort(arr, col, order="ASC"):
     t = time()
     n = len(arr)
+    
+    if skipfirst:
+      start = 1
 
-    for i in range(n):
-        for j in range(0, n-i-1):
+    for i in range(start, n):
+        for j in range(start, n-i):
             if condition(arr[j][col], arr[j+1][col], order):
                 arr[j], arr[j+1] = arr[j+1], arr[j]
     

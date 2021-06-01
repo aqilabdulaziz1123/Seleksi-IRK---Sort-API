@@ -19,6 +19,7 @@ def insert(algo, result, exectime):
 
   cursor.execute(query, args)
   db.commit()
+  db.close()
 
 def select(id = None):
     db = connection()
@@ -32,5 +33,6 @@ def select(id = None):
         cursor.execute("SELECT * FROM sorts WHERE id = %s", (id,))
     
     data = cursor.fetchone()
+    db.close()
 
     return data
