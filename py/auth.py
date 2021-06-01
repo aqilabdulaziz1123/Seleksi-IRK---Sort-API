@@ -34,10 +34,12 @@ def auth(next):
             return {"error": "auth header is required"}, 401
         
         key = request.headers["AUTH"]
+        try:
+            decoded = decode(key)
+        except:
+            decoded = None
 
-        decoded = decode(key)
-
-        if not("user" in decoded) or not (decoded["user"] in memoryauth):
+        if decoded is None or not("user" in decoded) or not (decoded["user"] in memoryauth):
             return {"error": "bad key"}, 401
 
         return next(*args, **kwargs)
