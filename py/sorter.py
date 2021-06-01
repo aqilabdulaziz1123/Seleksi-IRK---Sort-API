@@ -111,12 +111,36 @@ def listalgo(withfunc = False):
         "bubble": bubblesort if withfunc else 1,
     }
 
+def preprocess(data, col):
+  willremove = []
+  skipheader = skipfirst
+
+  for row in data:
+    if skipheader:
+      skipheader = False
+      continue
+    try:
+      int(row[col])
+      willremove.append(row)
+    except:
+      continue
+  
+  for victim in willremove:
+    data.remove(victim)
+  
+  return data
+
 def sort(csvfile, column, algorithm, order = "ASC"):
     algo = listalgo(True)
     array = fstocsvtoarray(csvfile)
 
+    if len(array) == 0 or len(array[0]) == 0:
+        return None, None, None, "Empty file"
+
     if column >= len(array[0]):
         return None, None, None, "Invalid column id"
+    
+    array = preprocess(array, column)
 
     arr, time = algo[algorithm](array, column, order)
     html = csvtohtml(arr)
