@@ -3,20 +3,21 @@ import time
 class Sorter:
     @staticmethod
     def selection(data, pivot, order):
-        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
+        extreme = lambda array : min(array) if order == "ASC" else max(array)
+
         start = time.time_ns()
+        keys = []
+        for d in data:
+            keys.append[d[pivot]]
+
+        n = len(data)
+        for i in range(1, n - 1):
+            extreme_value = extreme(keys[i:])
+            j = keys.index(extreme_value, i, n - 1)
+            data[i], data[j] = data[j], data[i]
+            keys[i], keys[j] = keys[j], keys[i]
+
         end = time.time_ns()
-
-        exec_time = (end - start) / 1000000000000
-        
-        return (data, exec_time)
-
-    @staticmethod
-    def insertion(data, pivot, order):
-        compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
-        start = time.time_ns()
-        end = time.time_ns()
-
         exec_time = (end - start) / 1000000000000
         
         return (data, exec_time)
@@ -56,7 +57,7 @@ class Sorter:
     def merge(data, pivot, order):
         compare = lambda a, b : (a[pivot] < b[pivot] if order == "ASC" else a[pivot] >= b[pivot])
         start = time.time_ns()
-        data = Sorter.merge(data, 0, len(data) - 1, compare)
+        data = Sorter.merge(data, 1, len(data) - 1, compare)
         end = time.time_ns()
 
         exec_time = (end - start) / 1000000000000
