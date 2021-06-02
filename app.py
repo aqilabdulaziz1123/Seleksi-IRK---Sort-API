@@ -1,16 +1,20 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, jsonify
 import mysql.connector
-from datetime import date
+from datetime import datetime, timedelta, date
 from werkzeug.utils import secure_filename
 import os
 import csv
 import time
+import jwt
 
 
 UPLOAD_FOLDER = 'test'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.config['SECRET_KEY'] = "semoga masuk irk amin"
+
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -198,10 +202,43 @@ def bubble(namafile, arah, kolom):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    session.clear()
+    return render_template('login.html')
+
+@app.route('/sort', methods = ['POST', 'GET'])
+def sort():
+    try:
+        token = session['token']
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+        return render_template('index.html')
+    except:
+        return "Token Invalid"
+
+@app.route('/login', methods = ['POST'])
+def login():
+    try:
+        p = request.form['password']
+        if request.form['username'] and p == '123456':
+            token = jwt.encode({
+                'username' : request.form['username'],
+                'exp': datetime.utcnow() + timedelta(seconds=300)
+            },
+            app.config['SECRET_KEY'])
+            session['token'] = token
+            return redirect(url_for(".sort"))
+        else:
+            return "Invalid Login"
+    except:
+        return "Error"
+
 
 @app.route('/sort/selection', methods=['POST'])
 def selectionsort():
+    try:
+        token = session['token']
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+    except:
+        return "Token Invalid"
     try:
         files = request.files['dataselection']
         namafile = files.filename
@@ -224,7 +261,7 @@ def selectionsort():
             val = ("Selection Sort", teks, etime)
             mycursor.execute(sql, val)
             mydb.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('.sort'))
         else:
             return "Ada error di input"
     except:
@@ -232,12 +269,16 @@ def selectionsort():
 
 @app.route('/sort/result', methods=['GET'])
 def result():
+    try:
+        token = session['token']
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+    except:
+        return "Token Invalid"
     mycursor.execute("SELECT hasil_sorting FROM sorts ORDER BY id DESC LIMIT 1")
 
     res = mycursor.fetchone()
 
     res = res[0]
-    print(res)
     res1 = res.split(" ")
     kolom = ""
     isi = []
@@ -256,6 +297,11 @@ def result():
 
 @app.route('/sort/bubble', methods=['POST'])
 def bubblesort():
+    try:
+        token = session['token']
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+    except:
+        return "Token Invalid"
     try:
         files = request.files['databubble']
         namafile = files.filename
@@ -278,7 +324,7 @@ def bubblesort():
             val = ("Bubble Sort", teks, etime)
             mycursor.execute(sql, val)
             mydb.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('.sort'))
         else:
             return "Ada error di input"
     except:
@@ -291,6 +337,5 @@ def temp():
     return render_template('temp.html', sort = res)
 
 if __name__ == "__main__":
-    app.secret_key = 'Semoga keterima IRK amin'
     app.run(debug = True)
 
