@@ -131,20 +131,24 @@ def listalgo(withfunc = False):
         "insertion": insertionsort if withfunc else 1
     }
 
-def preprocess(data, col):
+def preprocess(data, col, delete = False):
   willremove = []
   skipheader = skipfirst
 
-  for row in data:
+  for i in range(len(data)):
     if skipheader:
       skipheader = False
       continue
     
-    if isinstance(row[col], int):
-      willremove.append(row)
+    if isinstance(data[i][col], int):
+      if delete:
+        willremove.append(data[i])
+      else:
+        data[i][col] = str(data[i][col])
   
-  for victim in willremove:
-    data.remove(victim)
+  if delete:
+    for victim in willremove:
+      data.remove(victim)
   
   return data
 
@@ -158,7 +162,7 @@ def sort(csvfile, column, algorithm, order = "ASC"):
     if column >= len(array[0]):
         return None, None, None, "Invalid column id"
     
-    array = preprocess(array, column)
+    array = preprocess(array, column, False)
 
     arr, time = algo[algorithm](array, column, order)
     html = csvtohtml(arr)
