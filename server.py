@@ -29,13 +29,13 @@ def loginpage():
 def result():
   id = request.args.get("id")
 
-  if id is not None and (not id.isnumeric() or int(id) < 0):
-    return "bad argument (invalid id)", 400
+  if id is not None and (id == "" or not id.isnumeric() or int(id) < 0):
+    return {"error" :"bad argument (invalid id)"}, 400
   
   data = select(id)
   
   if data is None:
-    return "404 not found", 404
+    return {"error" :"404 not found"}, 404
 
   return render_template("index.html", html=Markup(csvtohtml(strtocsv(data[3]))), time="%.5f"%data[4], algorithm=data[2])
 
