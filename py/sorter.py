@@ -105,10 +105,30 @@ def bubblesort(arr, col, order="ASC"):
     
     return arr, time()-t
 
+def insertionsort(arr, col, order = "ASC"):
+  t = time()
+  n = len(arr)
+    
+  if skipfirst:
+    start = 1
+  
+  for i in range(start+1, n):
+    key = arr[i][col]
+    keyrow = arr[i]
+    j = i-1
+    while j >= start and condition(arr[j][col], key, order):
+      arr[j+1] = arr[j]
+      j -= 1
+    arr[j+1] = keyrow
+  
+  return arr, time()-t
+
+
 def listalgo(withfunc = False):
     return {
         "selection": selectionsort if withfunc else 1,
         "bubble": bubblesort if withfunc else 1,
+        "insertion": insertionsort if withfunc else 1
     }
 
 def preprocess(data, col):
@@ -119,11 +139,9 @@ def preprocess(data, col):
     if skipheader:
       skipheader = False
       continue
-    try:
-      int(row[col])
+    
+    if isinstance(row[col], int):
       willremove.append(row)
-    except:
-      continue
   
   for victim in willremove:
     data.remove(victim)
