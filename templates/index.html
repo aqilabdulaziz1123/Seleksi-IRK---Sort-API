@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Main Menu</title>
+{% endblock %}
+
+{% block body %}
+<div class="center">
+    <p><b><a href="/sort/result">See result</a></b></p>
+</div>
+<h1>Selection Sort</h1>
+<div class="form1">
+    <form action="/sort/selection" method="POST" enctype=multipart/form-data>
+        <input type="file" accept=".csv" name="dataselection" id="dataselection"><br>
+        <p>Pilih sort berdasarkan kolom ke berapa</p>
+        <label for="kolom">Kolom ke-</label>
+        <input type="number" id="kolom" name="kolom" min="1" max="9999">
+        <p>Pilih arah sort</p>
+        <input type="radio" id="asc" name="arah" value="asc">
+        <label for="asc">Ascending</label><br>
+        <input type="radio" id="desc" name="arah" value="desc">
+        <label for="female">Descending</label><br><br>
+        <input type="submit" value="Selection Sort"><br>
+    </form>
+</div>
+
+<h1>Bubble Sort</h1>
+<div class="form2">
+    <form action="/sort/bubble" method="POST" enctype=multipart/form-data>
+        <input type="file" accept=".csv" name="databubble" id="databubble">
+        <p>Pilih sort berdasarkan kolom ke berapa</p>
+        <label for="kolom">Kolom ke-</label>
+        <input type="number" id="kolom" name="kolom" min="1" max="9999">
+        <p>Pilih arah sort</p>
+        <input type="radio" id="asc" name="arah" value="asc">
+        <label for="asc">Ascending</label><br>
+        <input type="radio" id="desc" name="arah" value="desc">
+        <label for="female">Descending</label><br><br>
+        <input type="submit" value="Bubble sort">
+    </form> 
+</div>
+
+{% endblock %}

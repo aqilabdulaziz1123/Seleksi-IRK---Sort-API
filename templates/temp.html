@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Hasil Sorting</title>
+{% endblock %}
+
+
+{% block body %}
+<div class="sorts">
+<h1>Tabel Sorts</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Tanggal Sorting</th>
+        <th>Algoritma</th>
+        <th>Hasil Sorting</th>
+        <th>Execution Time</th>
+    </tr>
+    {% if sort != null %}
+    <tr>
+        <td>{{ sort[0] }}</td>
+        <td>{{ sort[1].date() }}</td>
+        <td>{{ sort[2] }}</td>
+        
+        <td>
+        {% for i in sort[3].split(" ") %}
+        {{ i }}<br>
+        {% endfor %}
+        </td>
+        <td>{{ sort[4] }}</td>
+    </tr>
+    {% endif %}
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Hasil Sorting</title>
+{% endblock %}
+
+
+{% block body %}
+<div class="sorts">
+<h1>Tabel Sorts</h1>
+<table>
+    <tr>
+        {% for i in kolom %}
+        <th>{{ i }}</th>
+        {% endfor %}
+    </tr>
+    {% for i in sorted %}
+    <tr>
+        {% for j in i %}
+        <td>{{ j }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
