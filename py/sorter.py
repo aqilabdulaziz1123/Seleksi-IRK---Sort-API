@@ -42,11 +42,7 @@ def csvtoarray(name):
   tes = open(name, "r")
   reader = csv.reader(tes)
 
-  skip = not skipfirst
   for row in reader:
-    if skip:
-      skip = False
-      continue
     data.append(row)
 
   tes.close()
@@ -59,11 +55,7 @@ def fstocsvtoarray(file):
   tes = StringIO(file.read().decode("utf-8"))
   reader = csv.reader(tes)
 
-  skip = not skipfirst
   for row in reader:
-    if skip:
-      skip = False
-      continue
     data.append(row)
 
   return data
