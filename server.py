@@ -15,12 +15,12 @@ def loginpage():
   args = request.form.to_dict()
 
   if not ("username" in args and "password" in args):
-    return {"error": "bad argument, need username and password"}
+    return {"error": "bad argument, need username and password"}, 400
 
   authkey = login(args["username"], args["password"])
 
   if authkey is None:
-    return {"error": "wrong username or password"}
+    return {"error": "wrong username or password"}, 401
   
   return {"auth_key": authkey}
 
@@ -30,12 +30,12 @@ def result():
   id = request.args.get("id")
 
   if id is not None and (not id.isnumeric() or int(id) < 0):
-    return "bad argument (invalid id)"
+    return "bad argument (invalid id)", 400
   
   data = select(id)
   
   if data is None:
-    return "404 not found"
+    return "404 not found", 404
 
   return render_template("index.html", html=Markup(csvtohtml(strtocsv(data[3]))), time="%.5f"%data[4], algorithm=data[2])
 
@@ -45,24 +45,24 @@ def selection(algo):
   listalg = listalgo()
 
   if not (algo in listalg):
-    return {"error": "Such algorithm is not exist in our system"}
+    return {"error": "Such algorithm is not exist in our system"}, 400
 
   args = request.form.to_dict()
 
   if not ("csv" in request.files):
-    return {"error": "Bad arguments (there should be file [csv])"}
+    return {"error": "Bad arguments (there should be file [csv])"}, 400
     
   file = request.files["csv"]
   
   col, order, err1 = validate(args)
   if err1 is not None:
-    return {"error": err1}
+    return {"error": err1}, 400
 
   # result
   arr, html, time, err2 = sort(file, col, algo, order)
 
   if err2 is not None:
-    return {"error": err2}
+    return {"error": err2}, 400
 
   # insert
   insert(algo, csvtostr(arr), time)
