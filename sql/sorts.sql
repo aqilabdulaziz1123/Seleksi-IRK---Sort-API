@@ -26,10 +26,10 @@ CREATE TABLE `sorts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime DEFAULT current_timestamp(),
   `algoritma` varchar(255) NOT NULL,
-  `result` varchar(65000) NOT NULL,
-  `exectime` int(11) NOT NULL,
+  `result` text NOT NULL,
+  `exectime` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-01 21:20:34
+-- Dump completed on 2021-06-02  7:15:19
