@@ -32,7 +32,12 @@ def result():
   if id is not None and (id == "" or not id.isnumeric() or int(id) < 0):
     return {"error" :"bad argument (invalid id)"}, 400
   
-  data = select(id)
+  data = None
+
+  try:
+    data = select(id)
+  except:
+    return {"error": "database error"}, 500
   
   if data is None:
     return {"error" :"404 not found"}, 404
@@ -65,6 +70,9 @@ def selection(algo):
     return {"error": err2}, 400
 
   # insert
-  insert(algo, csvtostr(arr), time)
+  try:
+    insert(algo, csvtostr(arr), time)
+  except:
+    return {"error": "database error"}, 500
 
   return render_template("index.html", html=Markup(html), time="%.5f"%time, algorithm=algo)
