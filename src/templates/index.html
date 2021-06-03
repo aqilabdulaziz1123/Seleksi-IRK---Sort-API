@@ -23,15 +23,12 @@
     <main role="main" class="container">
       <div class="card p-3" style="width: 25rem; margin: 0 auto">
         <h3 style="text-align: center">Sort Your CSV File Here!</h3><br>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
           <input type="file" id="fileCsv" name="fileCsv" accept=".csv" style="margin: 0 auto">
-
           <p></p>
-          
-          <div class="form-group">
+        
             <label for="column"><b>Column:</b></label><br>
             <input type="number" id="column" name="column">
-          </div>
 
           <p><b>Orientation:</b></p>
           <div class="checkbox">
