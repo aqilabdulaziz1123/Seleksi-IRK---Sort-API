@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename = 'main.css') }}">    
+
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: #393e46">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="/">Sorting Website</a>
+          </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container">
+      <div class="card p-3" style="width: 25rem; margin: 0 auto">
+        <h3 style="text-align: center">Sort Your CSV File Here!</h3><br>
+        <form method="POST">
+          <input type="file" id="fileCsv" name="fileCsv" accept=".csv" style="margin: 0 auto">
+
+          <p></p>
+          
+          <div class="form-group">
+            <label for="column"><b>Column:</b></label><br>
+            <input type="number" id="column" name="column">
+          </div>
+
+          <p><b>Orientation:</b></p>
+          <div class="checkbox">
+            <label><input type="checkbox" id="orient" name="orient" value="ASC"> Ascending</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" id="orient" name="orient" value="DESC"> Descending</label>
+          </div>
+
+          <br><p><b>Sorting Algorithm:</b></p>
+          <div class="w3-show-inline-block d-flex justify-content-center">
+            <div class="w3-bar">
+              <input type="submit" value="Selection" formaction="/sort/selection" class="w3-btn w3-black">
+              <input type="submit" value="Bubble" formaction="/sort/bubble" class="w3-btn w3-black">
+              <input type="submit" value="Insertion" formaction="/sort/insertion" class="w3-btn w3-black">
+              <input type="submit" value="Merge" formaction="/sort/merge" class="w3-btn w3-black">
+            </div>
+          </div>
+        </form>
+      </div>
+        <br>
+        {{ result | safe }}
+    </main>
+
+</body>
+</html>
