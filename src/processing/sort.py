@@ -1,4 +1,3 @@
-import csv
 import time
 
 def selection_sort(data, col, orient):

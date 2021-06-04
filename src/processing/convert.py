@@ -1,6 +1,14 @@
-def list_to_html(list):
+def list_to_html(l):
     table = '<table class="table table-bordered"><tbody>'
-    for sublist in list:
+
+    l1 = list(range(0,len(l[0])))
+    l2 = ["Column "+str(i) for i in l1]
+
+    table += '<tr class="active"><td>'
+    table += '</td><b></b><td>'.join(l2)
+    table += '  </td></tr>'
+
+    for sublist in l:
         table += '  <tr class="active"><td>'
         table += '    </td><td>'.join(sublist)
         table += '  </td></tr>'

@@ -15,43 +15,23 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: #393e46">
           <div class="container">
-            <a class="navbar-brand mr-4" href="/">Sorting Website</a>
+            <a class="navbar-brand mr-4" href="/sort?token={{token_message}}">Sorting Website</a>
+            <a class="navbar-brand mr-4" href="/sort/result?token={{token_message}}">See Results</a>
           </div>
         </nav>
-    </header>
-
+      </header>
     <main role="main" class="container">
-      <div class="card p-3" style="width: 25rem; margin: 0 auto">
-        <h3 style="text-align: center">Sort Your CSV File Here!</h3><br>
-        <form method="POST" enctype="multipart/form-data">
-          <input type="file" id="fileCsv" name="fileCsv" accept=".csv" style="margin: 0 auto">
-          <p></p>
-        
-            <label for="column"><b>Column:</b></label><br>
-            <input type="number" id="column" name="column">
+        <h3 style="text-align: center">Your Token</h3>
+        <p style="text-align: center">{{ token_message | safe }}</p>
 
-          <p><b>Orientation:</b></p>
-          <div class="checkbox">
-            <label><input type="checkbox" id="orient" name="orient" value="ASC"> Ascending</label>
-          </div>
-          <div class="checkbox">
-            <label><input type="checkbox" id="orient" name="orient" value="DESC"> Descending</label>
-          </div>
-
-          <br><p><b>Sorting Algorithm:</b></p>
+        <form method="POST">
           <div class="w3-show-inline-block d-flex justify-content-center">
             <div class="w3-bar">
-              <input type="submit" value="Selection" formaction="/sort/selection" class="w3-btn w3-black">
-              <input type="submit" value="Bubble" formaction="/sort/bubble" class="w3-btn w3-black">
-              <input type="submit" value="Insertion" formaction="/sort/insertion" class="w3-btn w3-black">
-              <input type="submit" value="Merge" formaction="/sort/merge" class="w3-btn w3-black">
+              <input type="submit" value="Start Sorting" formaction="/sort?token={{token_message}}" class="w3-btn w3-black">
             </div>
           </div>
         </form>
-      </div>
-        <br>
-        {{ result | safe }}
-    </main>
 
+    </main>
 </body>
 </html>
