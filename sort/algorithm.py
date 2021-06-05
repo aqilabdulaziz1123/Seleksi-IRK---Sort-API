@@ -67,7 +67,7 @@ def insertion_sort(jsonArray, idx, order):
                 j-=1
         jsonArray[j+1].update(tmpArray)  
     duration = (datetime.now()-start).total_seconds()
-    add_to_database(start, "bubble", str(jsonArray), duration)
+    add_to_database(start, "insertion", str(jsonArray), duration)
     return jsonArray
 
 
@@ -117,7 +117,7 @@ def merge_sort(jsonArray, idx, order):
     start = datetime.now()
     jsonArray = merge(jsonArray, idx, order)
     duration = (datetime.now()-start).total_seconds()
-    add_to_database(start, "bubble", str(jsonArray), duration)
+    add_to_database(start, "merge", str(jsonArray), duration)
     return jsonArray
 
 def partition(jsonArray, idx, order, low, high):
@@ -165,5 +165,5 @@ def quick_sort(jsonArray, idx, order):
     start = datetime.now()
     quick(jsonArray, idx, order, 0 , len(jsonArray)-1)
     duration = (datetime.now()-start).total_seconds()
-    add_to_database(start, "bubble", str(jsonArray), duration)
+    add_to_database(start, "quick", str(jsonArray), duration)
     return jsonArray
