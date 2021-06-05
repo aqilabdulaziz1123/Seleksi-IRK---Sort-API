@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style="text-align: center;">Login!!!</h1>
+<form method="POST" action="/login" enctype="multipart/form-data">
+    <div style="margin-left: 40%;">
+        <label for="username"><b>Username</b></label>
+        <input type="username" placeholder="Enter Username" name="username" required><br>
+    
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required><br>
+    </div>
+    <p style="margin-left: 45%;"><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

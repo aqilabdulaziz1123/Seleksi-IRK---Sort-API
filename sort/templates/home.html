@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style="text-align: center;">Welcome!!!</h1>
+<p>Your token : {{ items }}</p>
+<form method="POST" action="/sort/selection" enctype="multipart/form-data">
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="customFile" name="file" onclick="displayData()">
+    <label class="custom-file-label" for="customFile">Choose file</label>
+  </div>
+  <div class="nomorkolom">
+    <label for="column">Nomor Kolom</label>
+    <input type="text" id="nomorkolom" name="column">
+  </div>
+  <div style="display: inline-block; justify-content: space-between;">
+    <input type="radio" id="asc" name="order" value="asc">
+    <label for="asc">Ascending</label>
+    <input type="radio" id="desc" name="order" value="desc">
+    <label for="desc">Descending</label>
+  </div>
+  <p><input type="submit" value="Submit"></p>
+</form>
+<style>
+  form {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+  }
+</style>
+{% endblock %}
