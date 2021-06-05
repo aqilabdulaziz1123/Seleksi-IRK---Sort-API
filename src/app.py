@@ -52,7 +52,7 @@ def selection():
     col = int(request.form.get("column", False))
     ori = request.form.get("orient", False)
 
-    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0]))):
+    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0])-1)):
         os.remove(file.filename)
         return render_template("sort.html", result='<p style="text-align: center">Index out of range!</p>', token_message=message)
 
@@ -73,7 +73,7 @@ def bubble():
     col = int(request.form.get("column", False))
     ori = request.form.get("orient", False)
 
-    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0]))):
+    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0])-1)):
         os.remove(file.filename)
         return render_template("sort.html", result='<p style="text-align: center">Index out of range!</p>', token_message=message)
 
@@ -94,7 +94,7 @@ def merge():
     col = int(request.form.get("column", False))
     ori = request.form.get("orient", False)
 
-    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0]))):
+    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0])-1)):
         os.remove(file.filename)
         return render_template("sort.html", result='<p style="text-align: center">Index out of range!</p>', token_message=message)
 
@@ -115,7 +115,7 @@ def insertion():
     col = int(request.form.get("column", False))
     ori = request.form.get("orient", False)
 
-    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0]))):
+    if (len(list(csv.reader(open(file.filename)))) == 0 or (col<1 or col>len(list(csv.reader(open(file.filename)))[0])-1)):
         os.remove(file.filename)
         return render_template("sort.html", result='<p style="text-align: center">Index out of range!</p>', token_message=message)
 
@@ -131,10 +131,15 @@ def insertion():
 @app.route("/sort/result", methods=['GET'])
 @token_required
 def result():
-    result = select_id(last_id())
+    if request.args['id'] == '':
+        required_id = last_id()
+    else:
+        required_id = request.args['id']
+
+    result = select_id(required_id)
     result_html = list_to_html(string_to_list(result))
 
-    return render_template("result.html", result_for_id=result_html, result_id=last_id(), token_message=message)
+    return render_template("result.html", result_for_id=result_html, result_id=required_id, token_message=message)
 
 if __name__ == '__main__':
     app.run(debug = True)

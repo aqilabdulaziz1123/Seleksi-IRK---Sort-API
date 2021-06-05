@@ -16,7 +16,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="background-color: #393e46">
           <div class="container">
             <a class="navbar-brand mr-4" href="/sort?token={{token_message}}">Sorting Website</a>
-            <a class="navbar-brand mr-4" href="/sort/result?token={{token_message}}">See Results</a>
+            <a class="navbar-brand mr-4" href="/sort/result?id={{result_id}}&token={{token_message}}">See Results</a>
           </div>
         </nav>
     </header>
@@ -25,7 +25,7 @@
       <div class="card p-3" style="width: 25rem; margin: 0 auto">
         <h3 style="text-align: center">Sort Your CSV File Here!</h3><br>
         <form method="POST" enctype="multipart/form-data">
-          <input type="file" id="fileCsv" name="fileCsv" accept=".csv" style="margin: 0 auto">
+          <input type="file" id="fileCsv" name="fileCsv" accept=".csv" style="margin: 0 auto" Required>
           <p></p>
         
             <label for="column"><b>Column:</b></label><br>
