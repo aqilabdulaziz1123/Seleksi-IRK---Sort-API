@@ -1,0 +1,501 @@
+IDJurusan,Nama
+1,Basic Math
+2,English IV
+3,Accounting
+4,Trigonometry
+5,LOGIC
+6,Economics
+7,Geography
+8,Handwriting
+9,Instrumental Music
+10,Handwriting
+11,Earth Science
+12,Handwriting
+13,Trigonometry
+14,German
+15,French
+16,Dramatics
+17,Latin
+18,Accounting
+19,English IV
+20,Handwriting
+21,Ancient Civilizations
+22,Ancient Civilizations
+23,Basic Math
+24,Accounting
+25,Geography
+26,Instrumental Music
+27,Spanish
+28,American Literature
+29,Physical Education
+30,Ancient Civilizations
+31,History
+32,Trigonometry
+33,Music
+34,Science
+35,Dramatics
+36,Speech
+37,Health
+38,Instrumental Music
+39,Speech
+40,Physical Education
+41,Language Arts
+42,Basic Math
+43,LOGIC
+44,Science
+45,Art
+46,LOGIC
+47,LOGIC
+48,Leadership
+49,Geography
+50,Trigonometry
+51,Basic Math
+52,History
+53,Spanish
+54,Music
+55,Geography
+56,Design and technology
+57,Handwriting
+58,Handwriting
+59,French
+60,Modern Literature
+61,Dramatics
+62,Latin
+63,Dramatics
+64,Mathematics
+65,Grammar
+66,Latin
+67,Accounting
+68,Mathematics
+69,Earth Science
+70,LOGIC
+71,Spanish
+72,German
+73,Modern Literature
+74,Spanish
+75,History
+76,Leadership
+77,French
+78,Leadership
+79,Accounting
+80,Science
+81,Latin
+82,Instrumental Music
+83,Geography
+84,Instrumental Music
+85,Geography
+86,Art
+87,Accounting
+88,Handwriting
+89,German
+90,Health
+91,Speech
+92,Health
+93,History
+94,Trigonometry
+95,LOGIC
+96,Instrumental Music
+97,Language Arts
+98,Ecology
+99,Economics
+100,Handwriting
+101,American Literature
+102,Economics
+103,French
+104,Sociology
+105,Accounting
+106,German
+107,Sociology
+108,Art
+109,Handwriting
+110,Art
+111,Mathematics
+112,Design and technology
+113,Music
+114,Basic Math
+115,Leadership
+116,Grammar
+117,LOGIC
+118,Grammar
+119,Music
+120,Grammar
+121,Science
+122,Accounting
+123,Science
+124,Spanish
+125,Science
+126,Science
+127,Spanish
+128,Physical Education
+129,Modern Literature
+130,Economics
+131,Mathematics
+132,Modern Literature
+133,Trigonometry
+134,Health
+135,Geography
+136,Ecology
+137,History
+138,LOGIC
+139,Leadership
+140,Design and technology
+141,Instrumental Music
+142,Accounting
+143,Art
+144,Sociology
+145,Music
+146,Language Arts
+147,Mathematics
+148,Design and technology
+149,Ecology
+150,Geography
+151,Design and technology
+152,Latin
+153,Sociology
+154,Accounting
+155,Grammar
+156,Physical Education
+157,Science
+158,Speech
+159,Art
+160,Ecology
+161,History
+162,Grammar
+163,Latin
+164,Earth Science
+165,Dramatics
+166,English IV
+167,Music
+168,Dramatics
+169,Science
+170,Dramatics
+171,French
+172,Handwriting
+173,Health
+174,Mathematics
+175,Art
+176,Ecology
+177,Accounting
+178,Modern Literature
+179,Dramatics
+180,Ecology
+181,Resource Program
+182,Art
+183,Design and technology
+184,Latin
+185,French
+186,Ancient Civilizations
+187,Resource Program
+188,Spanish
+189,Design and technology
+190,Speech
+191,History
+192,Trigonometry
+193,Spanish
+194,Dramatics
+195,Speech
+196,Handwriting
+197,Grammar
+198,Physical Education
+199,Dramatics
+200,Latin
+201,Physical Education
+202,Instrumental Music
+203,Health
+204,Design and technology
+205,Earth Science
+206,Design and technology
+207,Music
+208,Resource Program
+209,Language Arts
+210,History
+211,Accounting
+212,Sociology
+213,Modern Literature
+214,Economics
+215,Speech
+216,Music
+217,LOGIC
+218,Art
+219,Handwriting
+220,Sociology
+221,Ecology
+222,Ancient Civilizations
+223,Health
+224,Dramatics
+225,English IV
+226,Design and technology
+227,Leadership
+228,Geography
+229,Accounting
+230,Latin
+231,Language Arts
+232,History
+233,Physical Education
+234,Speech
+235,Modern Literature
+236,Handwriting
+237,Music
+238,Handwriting
+239,Ancient Civilizations
+240,Trigonometry
+241,Leadership
+242,Handwriting
+243,German
+244,Speech
+245,Design and technology
+246,Geography
+247,Earth Science
+248,Ancient Civilizations
+249,Design and technology
+250,English IV
+251,German
+252,Grammar
+253,Physical Education
+254,Ancient Civilizations
+255,Economics
+256,Modern Literature
+257,American Literature
+258,Leadership
+259,Earth Science
+260,Trigonometry
+261,Instrumental Music
+262,Science
+263,Leadership
+264,Grammar
+265,French
+266,Physical Education
+267,Language Arts
+268,Ancient Civilizations
+269,Physical Education
+270,Trigonometry
+271,Handwriting
+272,Resource Program
+273,Dramatics
+274,Ancient Civilizations
+275,Geography
+276,Economics
+277,Science
+278,Handwriting
+279,Speech
+280,Music
+281,English IV
+282,Health
+283,American Literature
+284,Mathematics
+285,Grammar
+286,Latin
+287,Resource Program
+288,Modern Literature
+289,Sociology
+290,Handwriting
+291,Spanish
+292,Sociology
+293,Physical Education
+294,Grammar
+295,Instrumental Music
+296,Spanish
+297,Design and technology
+298,Mathematics
+299,Leadership
+300,Ecology
+301,Basic Math
+302,German
+303,Art
+304,Music
+305,English IV
+306,Basic Math
+307,Sociology
+308,Modern Literature
+309,Basic Math
+310,Art
+311,Instrumental Music
+312,Leadership
+313,Physical Education
+314,History
+315,Music
+316,American Literature
+317,Geography
+318,Language Arts
+319,Handwriting
+320,Earth Science
+321,Trigonometry
+322,Health
+323,Sociology
+324,Ancient Civilizations
+325,Language Arts
+326,Resource Program
+327,Ancient Civilizations
+328,Instrumental Music
+329,Trigonometry
+330,Sociology
+331,Earth Science
+332,Resource Program
+333,Design and technology
+334,German
+335,Art
+336,Sociology
+337,Accounting
+338,Resource Program
+339,Handwriting
+340,Physical Education
+341,Grammar
+342,Instrumental Music
+343,Accounting
+344,Sociology
+345,Sociology
+346,Instrumental Music
+347,Language Arts
+348,German
+349,Ecology
+350,Speech
+351,Instrumental Music
+352,Sociology
+353,Mathematics
+354,Earth Science
+355,LOGIC
+356,Trigonometry
+357,Latin
+358,Dramatics
+359,Earth Science
+360,Ecology
+361,Design and technology
+362,Mathematics
+363,Physical Education
+364,American Literature
+365,Physical Education
+366,Latin
+367,Sociology
+368,History
+369,Music
+370,Leadership
+371,Physical Education
+372,History
+373,Accounting
+374,Earth Science
+375,Instrumental Music
+376,Instrumental Music
+377,Latin
+378,Handwriting
+379,Sociology
+380,Latin
+381,Geography
+382,Science
+383,Basic Math
+384,Latin
+385,Mathematics
+386,Mathematics
+387,Economics
+388,English IV
+389,Music
+390,English IV
+391,Science
+392,American Literature
+393,History
+394,French
+395,French
+396,Mathematics
+397,Mathematics
+398,Dramatics
+399,Grammar
+400,History
+401,Dramatics
+402,Ecology
+403,Spanish
+404,Mathematics
+405,Science
+406,Earth Science
+407,Economics
+408,Resource Program
+409,Language Arts
+410,Modern Literature
+411,Speech
+412,Latin
+413,Mathematics
+414,Trigonometry
+415,Physical Education
+416,Accounting
+417,Geography
+418,Ecology
+419,Grammar
+420,Modern Literature
+421,Ecology
+422,Resource Program
+423,Latin
+424,Latin
+425,LOGIC
+426,Music
+427,Art
+428,Sociology
+429,Handwriting
+430,Physical Education
+431,Physical Education
+432,Mathematics
+433,Science
+434,Latin
+435,English IV
+436,Dramatics
+437,English IV
+438,Design and technology
+439,Accounting
+440,Instrumental Music
+441,Spanish
+442,Trigonometry
+443,Trigonometry
+444,Science
+445,Health
+446,Music
+447,Language Arts
+448,Speech
+449,Geography
+450,Instrumental Music
+451,Basic Math
+452,Spanish
+453,Instrumental Music
+454,Accounting
+455,Language Arts
+456,Grammar
+457,French
+458,Design and technology
+459,French
+460,Design and technology
+461,Dramatics
+462,Music
+463,Instrumental Music
+464,Basic Math
+465,Trigonometry
+466,Music
+467,Accounting
+468,Ancient Civilizations
+469,Music
+470,Resource Program
+471,Mathematics
+472,American Literature
+473,Grammar
+474,Latin
+475,German
+476,LOGIC
+477,Science
+478,Language Arts
+479,History
+480,Dramatics
+481,Earth Science
+482,Basic Math
+483,Leadership
+484,Science
+485,Leadership
+486,Earth Science
+487,Earth Science
+488,French
+489,Sociology
+490,Earth Science
+491,Geography
+492,Ancient Civilizations
+493,Ancient Civilizations
+494,Grammar
+495,Science
+496,Trigonometry
+497,Resource Program
+498,Music
+499,Trigonometry
+500,Ancient Civilizations

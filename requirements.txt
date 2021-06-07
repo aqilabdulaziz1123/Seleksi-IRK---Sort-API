@@ -1,0 +1,4 @@
+flask>=2.0.1
+mysql-connector-python>=8.0.25
+python-decouple>=3.4
+pyjwt==1.4.2

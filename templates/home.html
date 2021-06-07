@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Masukan data</h3>
+<form method="POST" action="/" id="formdata" enctype="multipart/form-data" onsubmit="changeAction();">
+    <div class="row mb-3">
+        <label for="file" class="col-sm-2 col-form-label">Upload file csv</label>
+        <div class="col-sm-5">
+            <input type="file" class="form-control-file" id="file" name="file" accept=".csv" required>
+        </div>
+    </div>
+    <div class="row mb-3">
+      <label for="kolomacuan" class="col-sm-2 col-form-label">Masukan kolom acuan</label>
+      <div class="col-sm-5">
+        <input type="number" class="form-control" min="1" id="kolomacuan" name="kolomacuan" required>
+      </div>
+    </div>
+    <fieldset class="row mb-3">
+      <legend class="col-form-label col-sm-2 pt-0">Pilih algoritma</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="algoritma" id="selection" value="selection" checked>
+          <label class="form-check-label" for="selection">
+            Selection sort
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="algoritma" id="bubble" value="bubble">
+          <label class="form-check-label" for="bubble">
+            Bubble sort
+          </label>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="row mb-3">
+      <legend class="col-form-label col-sm-2 pt-0">Orientasi Pengurutan</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="orientasi" id="asc" value="asc" checked>
+          <label class="form-check-label" for="asc">
+            Ascending / menaik
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="orientasi" id="desc" value="desc">
+          <label class="form-check-label" for="desc">
+            Descending / menurun
+          </label>
+        </div>
+      </div>
+    </fieldset>
+    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}
