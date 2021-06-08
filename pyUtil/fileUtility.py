@@ -39,7 +39,7 @@ def arrtofilestring(arr):
     rowlist = []
 
     for row in arr:
-        rowstring = ','.join(str(row))
+        rowstring = ','.join([str(item) for item in row])
         rowlist.append(rowstring)
     
     filestring = '\r\n'.join(rowlist)
