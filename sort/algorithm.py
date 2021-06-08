@@ -13,10 +13,10 @@ def selection_sort(jsonArray, idx, order):
             list1=list(jsonArray[min_idx].values())
             list2=list(jsonArray[j].values())
             if (order=="asc"):
-                if (list1[idx]>list2[idx]):
+                if (float(list1[idx])>float(list2[idx])):
                     min_idx=j
             else:
-                if (list1[idx]<list2[idx]):
+                if (float(list1[idx])<float(list2[idx])):
                     min_idx=j
         tmpArray.update(jsonArray[min_idx])
         jsonArray[min_idx].update(jsonArray[i])
@@ -34,12 +34,12 @@ def bubble_sort(jsonArray, idx, order):
             list1=list(jsonArray[j].values())
             list2=list(jsonArray[j+1].values())
             if (order=="asc"):
-                if (list1[idx]>list2[idx]):
+                if (float(list1[idx])>float(list2[idx])):
                     tmpArray.update(jsonArray[j])
                     jsonArray[j].update(jsonArray[j+1])
                     jsonArray[j+1].update(tmpArray)
             else:
-                if (list1[idx]<list2[idx]):
+                if (float(list1[idx])<float(list2[idx])):
                     tmpArray.update(jsonArray[j])
                     jsonArray[j].update(jsonArray[j+1])
                     jsonArray[j+1].update(tmpArray)                
@@ -58,11 +58,11 @@ def insertion_sort(jsonArray, idx, order):
         list2 = list(jsonArray[j].values())
         tmpArray.update(jsonArray[j+1])
         if (order=="asc"):
-            while j >= 0 and list1[idx]<list2[idx]:
+            while j >= 0 and float(list1[idx])<float(list2[idx]):
                 jsonArray[j+1].update(jsonArray[j])
                 j-=1
         else:
-            while j >= 0 and list1[idx]>list2[idx]:
+            while j >= 0 and float(list1[idx])>float(list2[idx]):
                 jsonArray[j+1].update(jsonArray[j])
                 j-=1
         jsonArray[j+1].update(tmpArray)  
@@ -88,14 +88,14 @@ def merge(jsonArray, idx, order):
             listleft = list(left[i].values())
             listright = list(right[j].values())
             if (order == "asc"):
-                if (listleft[idx]<listright[idx]):
+                if (float(listleft[idx])<float(listright[idx])):
                     jsonArray[k].update(left[i])
                     i+=1
                 else:
                     jsonArray[k].update(right[j])
                     j+=1
             else:
-                if (listleft[idx]<listright[idx]):
+                if (float(listleft[idx])<float(listright[idx])):
                     jsonArray[k].update(right[j])
                     j+=1
                 else:

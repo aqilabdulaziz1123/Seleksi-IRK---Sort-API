@@ -13,10 +13,10 @@ def parseCSV(filePath):
         for row in csvReader: 
             #add this python dict to json array
             jsonArray.append(row)
-    jsonArray = clean_incosistent(jsonArray)
+    jsonArray = clean_inconsistent(jsonArray)
     return jsonArray
 
-def clean_incosistent(jsonArray):
+def clean_inconsistent(jsonArray):
     for header,_ in jsonArray[0].items():
         emp=[]
         for i in range(len(jsonArray)):
