@@ -63,7 +63,6 @@ def csv_processing(algoritma, token):
         f.save(file_path)
     except FileNotFoundError:
         w = algoritma.split()
-        print(w[0].lower())
         return f"""
         <p>Please Input the CSV File!</p>
         <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
@@ -74,7 +73,6 @@ def csv_processing(algoritma, token):
         column_no = int(request.form.get('column_no'))
     except ValueError:
         w = algoritma.split()
-        print(w[0].lower())
         return f"""
         <p>Please Input the Column No.!</p>
         <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
@@ -91,7 +89,8 @@ def csv_processing(algoritma, token):
     #     """
 
     # Get list of row for the specified column
-    list_of_row = column_csv_reader(file_path, column_no)
+    column_name = column_csv_reader(file_path, column_no)[0]
+    list_of_row = column_csv_reader(file_path, column_no)[1]
 
     # Start sorting algorithm
     sorted_list = []
@@ -100,13 +99,11 @@ def csv_processing(algoritma, token):
         sorted_list = selection_sort(list_of_row, orientation)
     elif algoritma == 'Bubble Sort':
         sorted_list = bubble_sort(list_of_row, orientation)
-    elif algoritma == 'Insertion Sort':
-        sorted_list = insertion_sort(list_of_row, orientation)
     elif algoritma == 'Merge Sort':
         sorted_list = merge_sort(list_of_row, orientation)
     
     # Change the sorted_list to comma separated value
-    csv_result = ','.join(sorted_list)
+    csv_result = column_name + ',' + ','.join(sorted_list)
 
     # Get the execution time (Time now - Start time)
     execution_time = "{:.4f}".format(time.time() - start_time)
@@ -192,7 +189,7 @@ def login():
     conn = mysql.connection
     cursor = conn.cursor()
 
-    # creates dictionary of form data
+    # Creates dictionary of form data
     auth = request.form
 
     could_not_verify_message = """
@@ -202,7 +199,7 @@ def login():
     """
   
     if not auth or not auth.get('username') or not auth.get('password'):
-        # returns 401 if any username or / and password is missing
+        # Returns 401 if any username or / and password is missing
         return make_response(
             could_not_verify_message,
             401,
@@ -217,7 +214,7 @@ def login():
     user = cursor.execute(check_username)
   
     if not user:
-        # returns 401 if user does not exist
+        # Returns 401 if user does not exist
         return make_response(
             could_not_verify_message,
             401,
@@ -231,7 +228,7 @@ def login():
     cursor.close()
   
     if check_password_hash(password, auth.get('password')):
-        # generates the JWT Token
+        # Generates the JWT Token
         token = jwt.encode({
             'public_id': public_id,
             'exp' : datetime.utcnow() + timedelta(minutes = 30)
@@ -240,7 +237,7 @@ def login():
         session['logged_in'] = True
         return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
 
-    # returns 403 if password is wrong
+    # Returns 403 if password is wrong
     return make_response(
         could_not_verify_message,
         403,
@@ -255,14 +252,14 @@ def signup_page():
 def signup():
     conn = mysql.connection
     cursor = conn.cursor()
-    # creates a dictionary of the form data
+    # Creates a dictionary of the form data
     data = request.form
   
-    # gets name, username and password
+    # Gets name, username and password
     name, username = data.get('name'), data.get('username')
     password = data.get('password')
   
-    # checking for existing user
+    # Checking for existing user
     select_user = f"""
     SELECT *
     FROM user
@@ -270,7 +267,7 @@ def signup():
     """
     user = cursor.execute(select_user)
     if not user:
-        # database ORM object
+        # Database ORM object
         insert_user = f"""
         INSERT INTO user (public_id, name, username, password)
         VALUES ('{str(uuid.uuid4())}', '{name}', '{username}', '{generate_password_hash(password)}')
@@ -288,7 +285,7 @@ def signup():
   
         return make_response(successful_message, 201)
     else:
-        # returns 202 if user already exists
+        # Returns 202 if user already exists
         already_exist_message = """
         <p>User already exists. Please Log in.</p>
         <a href='/login'>Go to Login Page</a><br>
@@ -324,20 +321,6 @@ def bubble():
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
     return csv_processing("Bubble Sort", cleaned_token)
 
-@app.route('/sort/insertion')
-@authenticate
-def insertion_page():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return sorting_page('Insertion', cleaned_token)
-
-@app.route('/sort/insertion', methods=['POST'])
-@authenticate
-def insertion():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return csv_processing("Insertion Sort", cleaned_token)
-
 @app.route('/sort/merge')
 @authenticate
 def merge_page():
@@ -359,8 +342,12 @@ def result():
     cursor = conn.cursor()
     token = str(request.get_json)
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
+
+    # Get results if ID is present
     if 'id' in request.args:
         id = request.args['id']
+
+        # Search ID in the database
         selection = f"""
         SELECT *
         FROM sorts
@@ -369,6 +356,8 @@ def result():
         cursor.execute(selection)
         result = cursor.fetchall()
         cursor.close()
+
+        # If the data of that ID is found, return that data
         if result:
             results = result[0]
             csv_list = results[3].split(',')
@@ -381,8 +370,12 @@ def result():
             <p>Execution Time : {results[4]} second(s)</p>
             <a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>
             """
+        
+        # If the data of that ID isn't found, return error message
         else:
             return f"<p>No Data Found with ID {id} in the Database!</p><a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>"
+    
+    # Get result if ID is not present
     else:
         selection = """
         SELECT *
@@ -393,6 +386,8 @@ def result():
         cursor.execute(selection)
         result = cursor.fetchall()
         cursor.close()
+
+        # If there's any data in the database, return the last data
         if result:
             results = result[0]
             csv_list = results[3].split(',')
@@ -405,6 +400,8 @@ def result():
             <p>Execution Time : {results[4]} second(s)</p>
             <a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>
             """
+        
+        # If no data is found in the database, return error message
         else:
             return f"<p>No Data Found in the Database!</p><a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>"
 
