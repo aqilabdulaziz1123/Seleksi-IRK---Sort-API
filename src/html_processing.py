@@ -70,19 +70,36 @@ def sign_page():
     """
 
 # Function to turn a list into an html table
-def list_to_table(name, l):
+def list_to_table(l):
+    header = l[0]
+    body = l[1:]
+
     table_script = f"""
     <table class="dataframe" border="1">
         <tbody>
             <tr style="text-align: center">
-                <th colspan="{len(l)}">{name}</th>
-            </tr>
-            <tr style="text-align: center">
     """
-    for i in l:
-        table_script += f"\n<td>{i}</td>"
+    for colname in header:
+        table_script += f"""
+                <th>{colname}</th>
+        """
+    
     table_script += """
             </tr>
+        """
+
+    for row in body:
+        table_script += """
+            <tr style="text-align: center">
+        """
+        for col in row:
+            table_script += f"""
+                <td>{col}</td>
+            """
+        table_script += """
+            </tr>
+        """
+    table_script += """
         </tbody>
     </table>
     """

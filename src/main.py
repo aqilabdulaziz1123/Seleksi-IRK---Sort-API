@@ -11,9 +11,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from functools import wraps
 
-from csv_reader import *
+from csv_processing import *
 from sorting import *
 from html_processing import *
+from other_util import *
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -47,6 +48,25 @@ def home_page():
     </html>
     """
 
+def authenticate(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        token = request.args.get('token')
+        # return 401 if token is not passed
+        if not token:
+            return "<h1>401 Error</h1><p>Token is Missing!</p>", 401
+  
+        try:
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+        except:
+            return "<h1>401 Error</h1><p>Token is Invalid!</p>", 401
+        # returns the current logged in users contex to the routes
+        return  f(*args, **kwargs)
+  
+    return decorated
+
 # A function to process csv input from the user to the sorted one and can be used flexibly in this program
 def csv_processing(algoritma, token):
     # Initiate mysql connection & cursor
@@ -59,7 +79,7 @@ def csv_processing(algoritma, token):
     # Save the csv file from the user to 'csv_inputs' folder
     try:
         f = request.files['csv_file']
-        file_path = os.path.join('csv_inputs', secure_filename(f.filename))
+        file_path = os.path.join('..', 'csv_inputs', secure_filename(f.filename))
         f.save(file_path)
     except FileNotFoundError:
         w = algoritma.split()
@@ -89,8 +109,12 @@ def csv_processing(algoritma, token):
     #     """
 
     # Get list of row for the specified column
-    column_name = column_csv_reader(file_path, column_no)[0]
-    list_of_row = column_csv_reader(file_path, column_no)[1]
+    clean_strip(file_path)
+    preprocessed_data = data_preprocess(file_path)
+    column_name = preprocessed_data[0][column_no-1]
+
+    # User's input starts from 1 and the first element is the header
+    list_of_row = preprocessed_data[column_no]
 
     # Start sorting algorithm
     sorted_list = []
@@ -102,8 +126,11 @@ def csv_processing(algoritma, token):
     elif algoritma == 'Merge Sort':
         sorted_list = merge_sort(list_of_row, orientation)
     
+    preprocessed_data[column_no] = sorted_list
     # Change the sorted_list to comma separated value
-    csv_result = column_name + ',' + ','.join(sorted_list)
+    csv_result = list_to_csv(preprocessed_data)
+
+    csv_binary = str_to_bin(csv_result)
 
     # Get the execution time (Time now - Start time)
     execution_time = "{:.4f}".format(time.time() - start_time)
@@ -113,7 +140,7 @@ def csv_processing(algoritma, token):
     INSERT INTO sorts (tanggal_waktu, algoritma, sorting_result, execution_time)
     VALUES(%s, %s, %s, %s)
     """
-    cursor.execute(insertion, (datetime.now(), algoritma, csv_result, execution_time))
+    cursor.execute(insertion, (datetime.now(), algoritma, csv_binary, execution_time))
     conn.commit()
 
     # Get the sorting result's ID from the database
@@ -130,32 +157,15 @@ def csv_processing(algoritma, token):
     cursor.close()
 
     # Return the HTML Table of the sorted column, along with the sorting result ID and execution time
-    table = list_to_table(sorted_list[0], sorted_list[1:])
-    return f"""{table}
+    table = list_to_table(col_to_row(preprocessed_data))
+    return f"""
     <p>THE SORTING RESULT HAS BEEN INSERTED INTO THE DATABASE</p>
+    <p>Sorted Column : {column_name}</p>
+    {table}
     <p>Execution Time : {execution_time} second(s)</p>
     <p>ID : {sorting_id}</p>
     <a href='/mainpage?token={token}'>Back to Main Menu</a>
     """
-
-def authenticate(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-
-        token = request.args.get('token')
-        # return 401 if token is not passed
-        if not token:
-            return "<h1>401 Error</h1><p>Token is Missing!</p>", 401
-  
-        try:
-            # decoding the payload to fetch the stored details
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-        except:
-            return "<h1>401 Error</h1><p>Token is Invalid!</p>", 401
-        # returns the current logged in users contex to the routes
-        return  f(*args, **kwargs)
-  
-    return decorated
 
 @app.route('/mainpage')
 @authenticate
@@ -293,48 +303,20 @@ def signup():
         """
         return make_response(already_exist_message, 202)
 
-@app.route('/sort/selection')
+@app.route('/sort/<algorithm>')
 @authenticate
-def selection_page():
+def selection_page(algorithm):
     token = str(request.get_json)
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return sorting_page('Selection', cleaned_token)
+    return sorting_page(algorithm.capitalize(), cleaned_token)
 
-@app.route('/sort/selection', methods=['POST'])
+@app.route('/sort/<algorithm>', methods=['POST'])
 @authenticate
-def selection():
+def selection(algorithm):
     token = str(request.get_json)
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return csv_processing("Selection Sort", cleaned_token)
-
-@app.route('/sort/bubble')
-@authenticate
-def bubble_page():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return sorting_page('Bubble', cleaned_token)
-
-@app.route('/sort/bubble', methods=['POST'])
-@authenticate
-def bubble():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return csv_processing("Bubble Sort", cleaned_token)
-
-@app.route('/sort/merge')
-@authenticate
-def merge_page():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return sorting_page('Merge', cleaned_token)
-
-@app.route('/sort/merge', methods=['POST'])
-@authenticate
-def merge():
-    token = str(request.get_json)
-    cleaned_token = re.search('\?token=(.*)\'', token).group(1)
-    return csv_processing("Merge Sort", cleaned_token)
-
+    return csv_processing(f'{algorithm.capitalize()} Sort', cleaned_token)
+    
 @app.route('/sort/result', methods=['GET'])
 @authenticate
 def result():
@@ -360,10 +342,12 @@ def result():
         # If the data of that ID is found, return that data
         if result:
             results = result[0]
-            csv_list = results[3].split(',')
-            table = list_to_table(csv_list[0], csv_list[1:])
+            splitted_binary = split_string(results[3], 8)
+            csv_string = bin_to_str(splitted_binary)
+            csv_list = col_to_row(csv_to_list(csv_string))
+            table = list_to_table(csv_list)
             return f"""<p>ID : {results[0]}</p>
-            <p>Date : {results[1]}</p>
+            <p>Date, Time : {results[1].strftime('%d %B %Y, %X')} WIB</p>
             <p>Algorithm : {results[2]}</p>
             <p>Sorting Result : {results[3]}</p>
             {table}
@@ -390,10 +374,12 @@ def result():
         # If there's any data in the database, return the last data
         if result:
             results = result[0]
-            csv_list = results[3].split(',')
-            table = list_to_table(csv_list[0], csv_list[1:])
+            splitted_binary = split_string(results[3], 8)
+            csv_string = bin_to_str(splitted_binary)
+            csv_list = col_to_row(csv_to_list(csv_string))
+            table = list_to_table(csv_list)
             return f"""<p>ID : {results[0]}</p>
-            <p>Date : {results[1]}</p>
+            <p>Date, Time : {results[1].strftime('%d %B %Y, %X')} WIB</p>
             <p>Algorithm : {results[2]}</p>
             <p>Sorting Result : </p>
             {table}
