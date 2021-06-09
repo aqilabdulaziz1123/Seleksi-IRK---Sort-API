@@ -79,7 +79,7 @@ def csv_processing(algoritma, token):
     try:
         column_no = int(request.form.get('column_no'))
     
-    # Error handling if the user doesn't input any column number
+    # Error handling if the user doesn't input any column number or the right type of column number
     except ValueError:
         w = algoritma.split()
         return f"""
@@ -88,79 +88,88 @@ def csv_processing(algoritma, token):
         """
 
     # Get Sorting Orientation (Ascending or Descending)
-    # try:
     orientation = request.form.get('orientation')
-    # except ValueError:
-    #     w = algoritma.split()
-    #     print(w[0].lower())
-    #     return f"""
-    #     <p>Please Input the Sorting Orientation (ASC/DESC)!</p>
-    #     <a href='/sort/{w[0].lower()}'>Back to {algoritma}</a>
-    #     """
 
-    # Preprocess the csv file
-    clean_strip(file_path)
-    preprocessed_data = data_preprocess(file_path)
+    if (orientation):
+        # Preprocess the csv file
+        clean_strip(file_path)
+        preprocessed_data = data_preprocess(file_path)
 
-    # Get the column names
-    column_name = preprocessed_data[0][column_no-1]
+        # Get the column names
+        try:
+            column_name = preprocessed_data[0][column_no-1]
 
-    # Get list of row for the specified column
-    list_of_row = preprocessed_data[column_no]
+        # Handling for index out of range error
+        except IndexError:
+            w = algoritma.split()
+            return f"""
+            <p>Index out of range!</p>
+            <p>Please input the right index number!</p>
+            <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
+            """
 
-    # Start sorting algorithm
-    sorted_list = []
-    # Select which sort that the user wants to use
-    if algoritma == 'Selection Sort':
-        sorted_list = selection_sort(list_of_row, orientation)
-    elif algoritma == 'Bubble Sort':
-        sorted_list = bubble_sort(list_of_row, orientation)
-    elif algoritma == 'Merge Sort':
-        sorted_list = merge_sort(list_of_row, orientation)
-    
-    # Change the specified column of data that the user changes
-    preprocessed_data[column_no] = sorted_list
+        # Get list of row for the specified column
+        list_of_row = preprocessed_data[column_no]
 
-    # Change the sorted_list to comma separated value
-    csv_result = list_to_csv(preprocessed_data)
+        # Start sorting algorithm
+        sorted_list = []
+        # Select which sort that the user wants to use
+        if algoritma == 'Selection Sort':
+            sorted_list = selection_sort(list_of_row, orientation)
+        elif algoritma == 'Bubble Sort':
+            sorted_list = bubble_sort(list_of_row, orientation)
+        elif algoritma == 'Merge Sort':
+            sorted_list = merge_sort(list_of_row, orientation)
+        
+        # Change the specified column of data that the user changes
+        preprocessed_data[column_no] = sorted_list
 
-    # Change the csv file into binary (blob) to be saved into the database
-    csv_binary = str_to_bin(csv_result)
+        # Change the sorted_list to comma separated value
+        csv_result = list_to_csv(preprocessed_data)
 
-    # Get the execution time (Time now - Start time)
-    execution_time = "{:.4f}".format(time.time() - start_time)
+        # Change the csv file into binary (blob) to be saved into the database
+        csv_binary = str_to_bin(csv_result)
 
-    # Insert the sorting result into table 'sorts'
-    insertion = f"""
-    INSERT INTO sorts (tanggal_waktu, algoritma, sorting_result, execution_time)
-    VALUES(%s, %s, %s, %s)
-    """
-    cursor.execute(insertion, (datetime.now(), algoritma, csv_binary, execution_time))
-    conn.commit()
+        # Get the execution time (Time now - Start time)
+        execution_time = "{:.4f}".format(time.time() - start_time)
 
-    # Get the sorting result's ID from the database
-    selection = """
-    SELECT id
-    FROM sorts
-    ORDER BY id DESC
-    LIMIT 1
-    """
-    cursor.execute(selection)
-    sorting_id = cursor.fetchall()[0][0]
+        # Insert the sorting result into table 'sorts'
+        insertion = f"""
+        INSERT INTO sorts (tanggal_waktu, algoritma, sorting_result, execution_time)
+        VALUES(%s, %s, %s, %s)
+        """
+        cursor.execute(insertion, (datetime.now(), algoritma, csv_binary, execution_time))
+        conn.commit()
 
-    # Close the cursor
-    cursor.close()
+        # Get the sorting result's ID from the database
+        selection = """
+        SELECT id
+        FROM sorts
+        ORDER BY id DESC
+        LIMIT 1
+        """
+        cursor.execute(selection)
+        sorting_id = cursor.fetchall()[0][0]
 
-    # Return the HTML Table of the sorted column, along with the sorting result's ID and execution time
-    table = list_to_table(col_to_row(preprocessed_data))
-    return f"""
-    <p>THE SORTING RESULT HAS BEEN INSERTED INTO THE DATABASE</p>
-    <p>Sorted Column : {column_name}</p>
-    {table}
-    <p>Execution Time : {execution_time} second(s)</p>
-    <p>ID : {sorting_id}</p>
-    <a href='/mainpage?token={token}'>Back to Main Menu</a>
-    """
+        # Close the cursor
+        cursor.close()
+
+        # Return the HTML Table of the sorted column, along with the sorting result's ID and execution time
+        table = list_to_table(col_to_row(preprocessed_data))
+        return f"""
+        <p>THE SORTING RESULT HAS BEEN INSERTED INTO THE DATABASE</p>
+        <p>Sorted Column : {column_name}</p>
+        {table}
+        <p>Execution Time : {execution_time} second(s)</p>
+        <p>ID : {sorting_id}</p>
+        <a href='/mainpage?token={token}'>Back to Main Menu</a>
+        """
+    else:
+        w = algoritma.split()
+        return f"""
+        <p>Please Select the Sorting Orientation (Ascending/Descending)!</p>
+        <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
+        """
 
 # Homepage
 # Contains login and signup button

@@ -10,7 +10,7 @@ def sorting_page(algoritma, token):
         <body>
             <form action="/sort/{algoritma.lower()}?token={token}" method="post" enctype="multipart/form-data">
                 <label for="csv_file">Enter CSV File : </label>
-                <input type="file" accept=".csv" name="csv_file"/><br><br>
+                <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="csv_file"/><br><br>
                 <label for="column_no">Enter Column No. : (Starts from 1)</label>
                 <input type="text" name="column_no"/><br><br>
                 <label for="orientation">Sorting Orientation : </label>
