@@ -1,49 +1,55 @@
 def selection_sort(l, orientation):
+    l1 = l[1:]
     if orientation == 'ascending':
-        for i in range (len(l)):
+        for i in range (len(l1)):
             idx_min = i
-            for j in range (i+1, len(l)):
-                if l[j] < l[idx_min]:
+            for j in range (i+1, len(l1)):
+                if l1[j] < l1[idx_min]:
                     idx_min = j
-            l[i], l[idx_min] = l[idx_min], l[i]
+            l1[i], l1[idx_min] = l1[idx_min], l1[i]
     elif orientation == 'descending':
-        for i in range (len(l)):
+        for i in range (len(l1)):
             idx_min = i
-            for j in range (i+1, len(l)):
-                if l[j] > l[idx_min]:
+            for j in range (i+1, len(l1)):
+                if l1[j] > l1[idx_min]:
                     idx_min = j
-            l[i], l[idx_min] = l[idx_min], l[i]
-    return l
+            l1[i], l1[idx_min] = l1[idx_min], l1[i]
+    l1.insert(0,l[0])
+    return l1
 
 def bubble_sort(l, orientation):
+    l1 = l[1:]
     if orientation == 'ascending':
-        for i in range (len(l)):
-            for j in range (len(l)-i-1):
-                if l[j+1] < l[j]:
-                    l[j], l[j+1] = l[j+1], l[j]
+        for i in range (len(l1)):
+            for j in range (len(l1)-i-1):
+                if l1[j+1] < l1[j]:
+                    l1[j], l1[j+1] = l1[j+1], l1[j]
     elif orientation == 'descending':
-        for i in range (len(l)):
-            for j in range (len(l)-i-1):
-                if l[j+1] > l[j]:
-                    l[j], l[j+1] = l[j+1], l[j]
-    return l
+        for i in range (len(l1)):
+            for j in range (len(l1)-i-1):
+                if l1[j+1] > l1[j]:
+                    l1[j], l1[j+1] = l1[j+1], l1[j]
+    l1.insert(0,l[0])
+    return l1
 
 def insertion_sort(l, orientation):
+    l1 = l[1:]
     if orientation == 'ascending':
-        for i in range (1, len(l)):
-            key = l[i]
+        for i in range (1, len(l1)):
+            key = l1[i]
             j = i-1
-            while j >= 0 and key < l[j]:
-                l[j+1] = l[j]
+            while j >= 0 and key < l1[j]:
+                l1[j+1] = l1[j]
                 j -= 1
-            l[j+1] = key
+            l1[j+1] = key
 
 def merge_sort(l, orientation):
+    l1 = l[1:]
     if orientation == 'ascending':
-        if len(l) > 1:
-            mid = len(l)//2
-            left = l[:mid]
-            right = l[mid:]
+        if len(l1) > 1:
+            mid = len(l1)//2
+            left = l1[:mid]
+            right = l1[mid:]
             merge_sort(left, orientation)
             merge_sort(right, orientation)
 
@@ -51,28 +57,29 @@ def merge_sort(l, orientation):
 
             while i < len(left) and j < len(right):
                 if left[i] < right[j]:
-                    l[k] = left[i]
+                    l1[k] = left[i]
                     i += 1
                 else:
-                    l[k] = right[j]
+                    l1[k] = right[j]
                     j += 1
                 k += 1
             
             while i < len(left):
-                l[k] = left[i]
+                l1[k] = left[i]
                 i += 1
                 k += 1
             
             while j < len(right):
-                l[k] = right[j]
+                l1[k] = right[j]
                 j += 1
                 k += 1
-        return l
+        l1.insert(0,l[0])
+        return l1
     elif orientation == 'descending':
-        if len(l) > 1:
-            mid = len(l)//2
-            left = l[:mid]
-            right = l[mid:]
+        if len(l1) > 1:
+            mid = len(l1)//2
+            left = l1[:mid]
+            right = l1[mid:]
             merge_sort(left, orientation)
             merge_sort(right, orientation)
 
@@ -80,20 +87,21 @@ def merge_sort(l, orientation):
 
             while i < len(left) and j < len(right):
                 if left[i] > right[j]:
-                    l[k] = left[i]
+                    l1[k] = left[i]
                     i += 1
                 else:
-                    l[k] = right[j]
+                    l1[k] = right[j]
                     j += 1
                 k += 1
             
             while i < len(left):
-                l[k] = left[i]
+                l1[k] = left[i]
                 i += 1
                 k += 1
             
             while j < len(right):
-                l[k] = right[j]
+                l1[k] = right[j]
                 j += 1
                 k += 1
-        return l
+        l1.insert(0,l[0])
+        return l1

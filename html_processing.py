@@ -11,7 +11,7 @@ def sorting_page(algoritma, token):
             <form action="/sort/{algoritma.lower()}?token={token}" method="post" enctype="multipart/form-data">
                 <label for="csv_file">Enter CSV File : </label>
                 <input type="file" name="csv_file"/><br><br>
-                <label for="column_no">Enter Column No. : </label>
+                <label for="column_no">Enter Column No. : (Starts from 1)</label>
                 <input type="text" name="column_no"/><br><br>
                 <label for="orientation">Sorting Orientation : </label>
                 <input type="radio" id="asc" name="orientation" value="ascending"/>
@@ -70,16 +70,19 @@ def sign_page():
     """
 
 # Function to turn a list into an html table
-def list_to_table(l):
-    table_script = """
+def list_to_table(name, l):
+    table_script = f"""
     <table class="dataframe" border="1">
         <tbody>
-            <tr style="text-align: center;">     
+            <tr style="text-align: center">
+                <th colspan="{len(l)}">{name}</th>
+            </tr>
+            <tr style="text-align: center">
     """
     for i in l:
-        table_script += f"\n<th>{i}</th>"
+        table_script += f"\n<td>{i}</td>"
     table_script += """
-    </tr>
+            </tr>
         </tbody>
     </table>
     """

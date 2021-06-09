@@ -66,7 +66,7 @@ def csv_processing(algoritma, token):
         print(w[0].lower())
         return f"""
         <p>Please Input the CSV File!</p>
-        <a href='/sort/{w[0].lower()}'>Back to {algoritma}</a>
+        <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
         """
 
     # Get Column Number and Sorting Orientation (Ascending or Descending)
@@ -77,7 +77,7 @@ def csv_processing(algoritma, token):
         print(w[0].lower())
         return f"""
         <p>Please Input the Column No.!</p>
-        <a href='/sort/{w[0].lower()}'>Back to {algoritma}</a>
+        <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
         """
 
     # try:
@@ -133,10 +133,10 @@ def csv_processing(algoritma, token):
     cursor.close()
 
     # Return the HTML Table of the sorted column, along with the sorting result ID and execution time
-    table = list_to_table(sorted_list)
+    table = list_to_table(sorted_list[0], sorted_list[1:])
     return f"""{table}
     <p>THE SORTING RESULT HAS BEEN INSERTED INTO THE DATABASE</p>
-    <p>Execution Time : {execution_time}</p>
+    <p>Execution Time : {execution_time} second(s)</p>
     <p>ID : {sorting_id}</p>
     <a href='/mainpage?token={token}'>Back to Main Menu</a>
     """
@@ -371,13 +371,14 @@ def result():
         cursor.close()
         if result:
             results = result[0]
-            table = list_to_table(results[3].split(','))
+            csv_list = results[3].split(',')
+            table = list_to_table(csv_list[0], csv_list[1:])
             return f"""<p>ID : {results[0]}</p>
             <p>Date : {results[1]}</p>
             <p>Algorithm : {results[2]}</p>
             <p>Sorting Result : {results[3]}</p>
             {table}
-            <p>Execution Time : {results[4]}</p>
+            <p>Execution Time : {results[4]} second(s)</p>
             <a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>
             """
         else:
@@ -394,13 +395,14 @@ def result():
         cursor.close()
         if result:
             results = result[0]
-            table = list_to_table(results[3].split(','))
+            csv_list = results[3].split(',')
+            table = list_to_table(csv_list[0], csv_list[1:])
             return f"""<p>ID : {results[0]}</p>
             <p>Date : {results[1]}</p>
             <p>Algorithm : {results[2]}</p>
             <p>Sorting Result : </p>
             {table}
-            <p>Execution Time : {results[4]}</p>
+            <p>Execution Time : {results[4]} second(s)</p>
             <a href='/mainpage?token={cleaned_token}'>Back to Main Menu</a>
             """
         else:
