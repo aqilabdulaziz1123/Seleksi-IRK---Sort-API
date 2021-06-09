@@ -3,13 +3,13 @@ import time
 import jwt
 import uuid
 import re
-from dotenv import load_dotenv
 from flask import Flask, request, session, jsonify, make_response
 from flask_mysqldb import MySQL
+from dotenv import load_dotenv
+from functools import wraps
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
-from functools import wraps
 
 from csv_processing import *
 from sorting import *
@@ -21,48 +21,33 @@ app.config['DEBUG'] = True
 
 load_dotenv()
 
+# Set a secret key (private key) as an information used to decrypt or encrypt message
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+# Set up MySql database
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = os.getenv('DB_PASSWORD')
-app.config['MYSQL_DB'] = 'sorting_results'
+app.config['MYSQL_DB'] = 'sorts'
 
 mysql = MySQL(app)
 
-@app.route('/')
-def home_page():
-    return """
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset='utf-8'>
-            <title>Sorting API Homepage</title>
-        </head>
-        <body>
-            <h1>Sorting API</h1>
-            <h5>by : Daffa Ananda Pratama Resyaly -- 13519107</h5>
-            <a href='/login'>Login</a><br>
-            <a href='/signup'>Signup</a>
-        </body>
-    </html>
-    """
-
+# Authenticate user via JSON Web Token (JWT)
 def authenticate(f):
     @wraps(f)
     def decorated(*args, **kwargs):
 
         token = request.args.get('token')
-        # return 401 if token is not passed
+        # Return 401 if token is not passed
         if not token:
             return "<h1>401 Error</h1><p>Token is Missing!</p>", 401
   
         try:
-            # decoding the payload to fetch the stored details
+            # Decoding the payload to fetch the stored details
             data = jwt.decode(token, app.config['SECRET_KEY'])
         except:
             return "<h1>401 Error</h1><p>Token is Invalid!</p>", 401
-        # returns the current logged in users contex to the routes
+        # Returns the current logged in users contex to the routes
         return  f(*args, **kwargs)
   
     return decorated
@@ -81,6 +66,8 @@ def csv_processing(algoritma, token):
         f = request.files['csv_file']
         file_path = os.path.join('..', 'csv_inputs', secure_filename(f.filename))
         f.save(file_path)
+
+    # Error handling if the user doesn't input any file
     except FileNotFoundError:
         w = algoritma.split()
         return f"""
@@ -88,9 +75,11 @@ def csv_processing(algoritma, token):
         <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
         """
 
-    # Get Column Number and Sorting Orientation (Ascending or Descending)
+    # Get Column Number
     try:
         column_no = int(request.form.get('column_no'))
+    
+    # Error handling if the user doesn't input any column number
     except ValueError:
         w = algoritma.split()
         return f"""
@@ -98,6 +87,7 @@ def csv_processing(algoritma, token):
         <a href='/sort/{w[0].lower()}?token={token}'>Back to {algoritma}</a>
         """
 
+    # Get Sorting Orientation (Ascending or Descending)
     # try:
     orientation = request.form.get('orientation')
     # except ValueError:
@@ -108,12 +98,14 @@ def csv_processing(algoritma, token):
     #     <a href='/sort/{w[0].lower()}'>Back to {algoritma}</a>
     #     """
 
-    # Get list of row for the specified column
+    # Preprocess the csv file
     clean_strip(file_path)
     preprocessed_data = data_preprocess(file_path)
+
+    # Get the column names
     column_name = preprocessed_data[0][column_no-1]
 
-    # User's input starts from 1 and the first element is the header
+    # Get list of row for the specified column
     list_of_row = preprocessed_data[column_no]
 
     # Start sorting algorithm
@@ -126,10 +118,13 @@ def csv_processing(algoritma, token):
     elif algoritma == 'Merge Sort':
         sorted_list = merge_sort(list_of_row, orientation)
     
+    # Change the specified column of data that the user changes
     preprocessed_data[column_no] = sorted_list
+
     # Change the sorted_list to comma separated value
     csv_result = list_to_csv(preprocessed_data)
 
+    # Change the csv file into binary (blob) to be saved into the database
     csv_binary = str_to_bin(csv_result)
 
     # Get the execution time (Time now - Start time)
@@ -156,7 +151,7 @@ def csv_processing(algoritma, token):
     # Close the cursor
     cursor.close()
 
-    # Return the HTML Table of the sorted column, along with the sorting result ID and execution time
+    # Return the HTML Table of the sorted column, along with the sorting result's ID and execution time
     table = list_to_table(col_to_row(preprocessed_data))
     return f"""
     <p>THE SORTING RESULT HAS BEEN INSERTED INTO THE DATABASE</p>
@@ -167,6 +162,28 @@ def csv_processing(algoritma, token):
     <a href='/mainpage?token={token}'>Back to Main Menu</a>
     """
 
+# Homepage
+# Contains login and signup button
+@app.route('/')
+def home_page():
+    return """
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset='utf-8'>
+            <title>Sorting API Homepage</title>
+        </head>
+        <body>
+            <h1>Sorting API</h1>
+            <h5>by : Daffa Ananda Pratama Resyaly -- 13519107</h5>
+            <a href='/login'>Login</a><br>
+            <a href='/signup'>Signup</a>
+        </body>
+    </html>
+    """
+
+# Mainpage for user
+# Contains the sorting algorithm choices and result viewer
 @app.route('/mainpage')
 @authenticate
 def mainpage():
@@ -190,6 +207,7 @@ def mainpage():
     </html>
     """
 
+# Login page and method
 @app.route('/login')
 def login_page():
     return log_page()
@@ -254,6 +272,7 @@ def login():
         {'WWW-Authenticate' : 'Basic realm ="Wrong Password !!"'}
     )
 
+# Signup page and method
 @app.route('/signup')
 def signup_page():
     return sign_page()
@@ -303,20 +322,22 @@ def signup():
         """
         return make_response(already_exist_message, 202)
 
+# Sorting algorithm page and method based on the url that user goes to
 @app.route('/sort/<algorithm>')
 @authenticate
-def selection_page(algorithm):
+def algorithm_page(algorithm):
     token = str(request.get_json)
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
     return sorting_page(algorithm.capitalize(), cleaned_token)
 
 @app.route('/sort/<algorithm>', methods=['POST'])
 @authenticate
-def selection(algorithm):
+def algorithm_process(algorithm):
     token = str(request.get_json)
     cleaned_token = re.search('\?token=(.*)\'', token).group(1)
     return csv_processing(f'{algorithm.capitalize()} Sort', cleaned_token)
-    
+
+# Result of the sorting    
 @app.route('/sort/result', methods=['GET'])
 @authenticate
 def result():

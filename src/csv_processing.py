@@ -2,6 +2,7 @@ import re
 import pandas as pd
 from collections import Counter
 
+# Strip the csv file (Removing trailing spaces)
 def clean_strip(filename):
     cleaned_filename = re.search('(.*)\.csv', filename).group(1)
     with open(filename, 'r', newline='') as inf, open(f'{cleaned_filename}_cleaned.csv', 'w') as of:
@@ -9,6 +10,7 @@ def clean_strip(filename):
             trimmed = (field.strip().strip('"') for field in line.split(','))
             of.write(','.join(trimmed)+'\n')
 
+# Preprocess the data to delete inconsistent data
 def data_preprocess(filename):
     cleaned_filename = re.search('(.*)\.csv', filename).group(1)
     df = pd.read_csv(f'{cleaned_filename}_cleaned.csv')

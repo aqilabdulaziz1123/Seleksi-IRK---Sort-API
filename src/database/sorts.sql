@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `sorts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sorts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tanggal_waktu` date DEFAULT NULL,
+  `tanggal_waktu` datetime DEFAULT NULL,
   `algoritma` varchar(255) DEFAULT NULL,
-  `sorting_result` varchar(255) DEFAULT NULL,
+  `sorting_result` blob DEFAULT NULL,
   `execution_time` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -78,4 +78,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-06  3:04:30
+-- Dump completed on 2021-06-10  1:27:14

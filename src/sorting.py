@@ -1,6 +1,5 @@
 # There are two orientations of the sorting algorithm : Ascending and Descending
 # The orientation of sorting is based on user's input
-
 def selection_sort(l, orientation):
     if orientation == 'ascending':
         for i in range (len(l)):
