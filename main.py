@@ -3,27 +3,13 @@ from time import time
 import pandas as pd
 
 def csv_to_list(file_name):
-     # Create a dataframe from csv
     df = pd.read_csv(file_name, delimiter=',')
     data = []
     data.append(df.columns.to_list())
     values = df.values.tolist()
     for val in values:
         data.append(val)
-    # # User list comprehension to create a list of lists from Dataframe rows
-    # list_of_rows = [list(row) for row in df.values]
-    # # Insert Column names as first list in list of lists
-    # list_of_rows.insert(0, df.columns.to_list())
-    # # Print list of lists i.e. rows
     return data
-
-# def csv_to_list(file_name):
-#     file = open(file_name, "r")
-#     csv_reader = csv.reader(file)
-#     data = []
-#     for row in csv_reader:
-#         data.append(row)
-#     return data 
 
 def list_to_table(list):
     table = """<table class="table table-hover">\n"""
