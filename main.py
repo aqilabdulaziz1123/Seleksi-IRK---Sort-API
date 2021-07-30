@@ -53,12 +53,6 @@ def string_to_list(input_string):
         result.append(cols_list)
     return result
 
-# def print_matrix(matrix):
-#     for i in range(len(matrix)):
-#         for j in range(len(matrix[0])):
-#             print(matrix[i][j],end=" ")
-#         print()
-
 def selection_sort(data, col_idx, orientation):
     start_time = time()
     N = len(data)
@@ -107,29 +101,3 @@ def insertion_sort(data, col_idx, orientation):
             data[j + 1] = key
     execution_time = time() - start_time     
     return data, execution_time
-
-### DRIVER ###
-# print(csv_to_list("tes.csv"))
-# print(csv_to_list("100 Sales Records.csv"))
-# A = [64, 25, 12, 22, 11]
-# B = [[1,2,3],[4,6,9],[2,3,10]]
-# print_matrix(B)
-# ins = insertion_sort(B,0,"desc")[0]
-# bub = bubble_sort(B,0,"desc")[0]
-# sel = selection_sort(B,0,"desc")[0]
-# print("Insertion sort")
-# print_matrix(ins)
-# print("Bubble sort")
-# print_matrix(bub)
-# print("Selection sort")
-# print_matrix(sel)
-# print("CSV")
-# list_tes = csv_to_list("tes.csv")
-# html_tes = list_to_table(list_tes)
-# string_tes = list_to_string(list_tes)
-# print(list_tes)
-# print(html_tes)
-# print(string_tes)
-# # string_to_csv("haites.csv",string_tes)
-# list_daristring = string_to_list(string_tes)
-# print(list_daristring)
