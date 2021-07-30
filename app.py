@@ -24,7 +24,7 @@ def token_required(f):
             return jsonify({'msg': 'Token is missing!'})
 
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            jwt.decode(token, options={"verify_signature": False})
         except:
             return jsonify({'msg': 'Token is invalid'})
 
@@ -75,10 +75,10 @@ def result_by_id(id):
 def login():
     auth = request.authorization
 
-    if(auth and auth.password == 'password'):
+    if auth and auth.password == 'password':
         token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow(
         ) + datetime.timedelta(minutes=10)}, app.config['SECRET_KEY'])
-
+        print(token)
         return jsonify({'token': token})
 
     return make_response('Login Required')
