@@ -1,33 +1,42 @@
 import csv
 from time import time
+import pandas as pd
 
 def csv_to_list(file_name):
-    file = open(file_name, "r")
-    csv_reader = csv.reader(file)
+     # Create a dataframe from csv
+    df = pd.read_csv(file_name, delimiter=',')
     data = []
-    for row in csv_reader:
-        data.append(row)
-    return data 
+    data.append(df.columns.to_list())
+    values = df.values.tolist()
+    for val in values:
+        data.append(val)
+    # # User list comprehension to create a list of lists from Dataframe rows
+    # list_of_rows = [list(row) for row in df.values]
+    # # Insert Column names as first list in list of lists
+    # list_of_rows.insert(0, df.columns.to_list())
+    # # Print list of lists i.e. rows
+    return data
 
-# def string_to_csv(file_name, string):
-#     file = open(file_name, "w")
-#     csv_writer = csv.writer(file)
-#     csv_writer.writerow(string)
+# def csv_to_list(file_name):
+#     file = open(file_name, "r")
+#     csv_reader = csv.reader(file)
+#     data = []
+#     for row in csv_reader:
+#         data.append(row)
+#     return data 
 
 def list_to_table(list):
-    table = """<table>\n"""
-    # Create the table's column headers
+    table = """<table class="table table-hover">\n"""
     header = list[0]
     table += """  <tr>\n"""
     for column in header:
-        table += """   <th>{0}</th>\n""".format(column.strip())
+        table += """   <th>{0}</th>\n""".format(str(column).strip())
     table += """  </tr>\n"""
-    # Create the table's row data
     row_data = list[1:]
     for line in row_data:
         table += """  <tr>\n"""
         for column in line:
-            table += """    <td>{0}</td>\n""".format(column.strip())
+            table += """    <td>{0}</td>\n""".format(str(column).strip())
         table += """  </tr>\n"""
     table += """</table>"""
     return table
@@ -81,13 +90,8 @@ def selection_sort(data, col_idx, orientation):
 def bubble_sort(data, col_idx, orientation):
     start_time = time()
     N = len(data)
-    # Traverse through all array elements
-    for i in range(1,N):
-        # Last i elements are already in place
-        for j in range(0, N-i-1):
-            # traverse the array from 0 to n-i-1
-            # Swap if the element found is greater
-            # than the next element
+    for i in range(1,N-1):
+        for j in range(1,N-i):
             if (orientation == "asc"):
                 if data[j][col_idx] > data[j+1][col_idx]:
                     data[j], data[j+1] = data[j+1], data[j]
@@ -100,31 +104,31 @@ def bubble_sort(data, col_idx, orientation):
 def insertion_sort(data, col_idx, orientation):
     start_time = time()
     N = len(data)
-    # Traverse through 1 to len(arr)
-    for i in range(2, N):
+    for i in range(1, N):
         key = data[i]
-        # Move elements of data[0..i-1], that are
-        # greater than key, to one position ahead
-        # of their current position
         j = i-1
         if (orientation == "asc"):
-            while j >= 0 and key[col_idx] < data[j][col_idx]:
-                    data[j + 1] = data[j]
-                    j -= 1
+            while j > 0 and key[col_idx] < data[j][col_idx]:
+                data[j + 1] = data[j]
+                j -= 1
+            data[j + 1] = key
         else:
-            while j >= 0 and key[col_idx] > data[j][col_idx]:
-                    data[j + 1] = data[j]
-                    j -= 1
-        data[j + 1] = key
+            while j > 0 and key[col_idx] > data[j][col_idx]:
+                data[j + 1] = data[j]
+                j -= 1
+            data[j + 1] = key
     execution_time = time() - start_time     
     return data, execution_time
 
-A = [64, 25, 12, 22, 11]
-B = [[1,2,3],[4,6,9],[2,3,10]]
-print_matrix(B)
-ins = insertion_sort(B,0,"desc")[0]
-bub = bubble_sort(B,0,"desc")[0]
-sel = selection_sort(B,0,"desc")[0]
+### DRIVER ###
+# print(csv_to_list("tes.csv"))
+# print(csv_to_list("100 Sales Records.csv"))
+# A = [64, 25, 12, 22, 11]
+# B = [[1,2,3],[4,6,9],[2,3,10]]
+# print_matrix(B)
+# ins = insertion_sort(B,0,"desc")[0]
+# bub = bubble_sort(B,0,"desc")[0]
+# sel = selection_sort(B,0,"desc")[0]
 # print("Insertion sort")
 # print_matrix(ins)
 # print("Bubble sort")

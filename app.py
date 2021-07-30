@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, request
 from flask_mysqldb import MySQL
 from database import *
-from main import list_to_string, list_to_table, string_to_list, selection_sort, insertion_sort, bubble_sort
-import csv, os
+from main import list_to_string, list_to_table, string_to_list, selection_sort, insertion_sort, bubble_sort, csv_to_list
+# import pandas as pd
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -22,8 +22,9 @@ def sorting(algorithm):
     # file.save(file.filename)
     col_idx = int(request.form.get("col_idx"))
     orientation = request.form.get("orientation")
-
-    data = list(csv.reader(open(file.filename)))
+    data = csv_to_list(file.filename)
+    # data = list(csv_to_list(file.filename))
+    # data = list(csv.reader(open(file.filename)))
     if algorithm == "selection":
         sorted_data, execution_time = selection_sort(data, col_idx, orientation)
     elif algorithm == "bubble":
@@ -38,16 +39,60 @@ def sorting(algorithm):
 
     return render_template("result.html", result=result_html)
 
+# @app.route('/sort/selection', methods=['POST'])
+# def selection():
+#     file = request.files['csv_file']
+#     file.save(file.filename)
+#     col_idx = int(request.form.get("col_idx"))
+#     orientation = request.form.get("orientation")
+#     data = list(csv.reader(open(file.filename)))
 
-@app.route('/sort/result', methods=['GET'])
-def result():
-    if request.args['id'] is None:
-        sorts_id = select_last_id()
-    else:
-        sorts_id = request.args['id']
-    result_string = select_by_id(sorts_id)[3]
-    result_html = list_to_table(string_to_list(result_string))
-    return render_template('result.html', result=result_html, result_id=sorts_id)
+#     sorted_data, execution_time = selection_sort(data, col_idx, orientation)
+#     result_html = list_to_table(sorted_data)
+#     result_string = list_to_string(sorted_data)
+#     insert("selection",result_string,execution_time)
+
+#     return render_template("result.html", result=result_html)
+
+# @app.route('/sort/bubble', methods=['POST'])
+# def bubble():
+#     file = request.files['csv_file']
+#     file.save(file.filename)
+#     col_idx = int(request.form.get("col_idx"))
+#     orientation = request.form.get("orientation")
+#     data = list(csv.reader(open(file.filename)))
+
+#     sorted_data, execution_time = bubble_sort(data, col_idx, orientation)
+#     result_html = list_to_table(sorted_data)
+#     result_string = list_to_string(sorted_data)
+#     insert("bubble",result_string,execution_time)
+
+#     return render_template("result.html", result=result_html)
+
+# @app.route('/sort/insertion', methods=['POST'])
+# def insertion():
+#     file = request.files['csv_file']
+#     file.save(file.filename)
+#     col_idx = int(request.form.get("col_idx"))
+#     orientation = request.form.get("orientation")
+#     data = list(csv.reader(open(file.filename)))
+
+#     sorted_data, execution_time = insertion_sort(data, col_idx, orientation)
+#     result_html = list_to_table(sorted_data)
+#     result_string = list_to_string(sorted_data)
+#     insert("insertion",result_string,execution_time)
+
+#     return render_template("result.html", result=result_html)
+
+# @app.route('/sort/result', methods=['GET'])
+# def result():
+#     if request.args['id'] is None:
+#         sorts_id = select_last_id()
+#     else:
+#         sorts_id = request.args['id']
+#     result_string = select_by_id(sorts_id)[3]
+#     result_html = list_to_table(string_to_list(result_string))
+#     return render_template('result.html', result=result_html, result_id=sorts_id)
 
 if __name__ == "__main__":
     app.run(debug=True)
