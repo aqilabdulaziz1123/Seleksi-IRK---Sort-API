@@ -3,6 +3,8 @@ from time import time
 import pandas as pd
 
 def csv_to_list(file_name):
+    folder = 'test/'
+    file_name = folder + file_name
     df = pd.read_csv(file_name, delimiter=',')
     data = []
     data.append(df.columns.to_list())
@@ -51,11 +53,11 @@ def string_to_list(input_string):
         result.append(cols_list)
     return result
 
-def print_matrix(matrix):
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
-            print(matrix[i][j],end=" ")
-        print()
+# def print_matrix(matrix):
+#     for i in range(len(matrix)):
+#         for j in range(len(matrix[0])):
+#             print(matrix[i][j],end=" ")
+#         print()
 
 def selection_sort(data, col_idx, orientation):
     start_time = time()
