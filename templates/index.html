@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        section{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        section div {
+            width: 60%;
+        }
+        @media screen and (max-width: 480px) {
+            section div {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h4><a href="/login">Login</a></h4>
+
+        <div>
+            <h1 id="page_title">
+                <b>SORT API</b>
+            </h1>
+            <p><i>Oleh: <a href="https://github.com/naufalizza" target="_blank">M. Naufal Izza F. - 13519088</a></i></p>
+            <hr/>
+            
+            <!-- INIT DB -->
+            <h3><b>INIT DATABASE</b></h3>
+            <form action="init_db" method="post" enctype="multipart/form-data">
+                <input type="submit" name="" value="initialize"/>
+            </form>
+            <hr/>
+
+            <!-- UPLOADER -->
+            <h3><b>UPLOADER</b></h3>
+            <form id="form_uploader" action="sort/selection" onsubmit="upload_handler()" method="post" enctype="multipart/form-data">
+                <input type="file" name="csv_uploader" value=""/>
+                <input type="number" name="selected_column" value="0"/>
+                <select name="orientation">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <select id="algo_option" name="algorithm">
+                    <option value="selection_sort">Selection Sort</option>
+                    <option value="bubble_sort">Bubble Sort</option>
+                </select>
+                <input type="submit" name="" value="submit"/>
+            </form>
+            <h5><i><b>*Pastikan data pada file csv bertipe numerik. Program akan otomatis mengonversi tipe numerik ke integer dengan pembulatan ke bawah (floor)</b></i></h5>
+            <hr/>
+        
+            <!-- GET RESULT -->
+            <h3><b>SHOW RESULT</b></h3>
+            <form id="get_form" action="sort/result" method="GET">
+                <select name="id">
+                    <option id="dummy_option" value="">==pilih id data==</option>
+                    {% for i in list_id %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="get result">
+        
+            </form>
+            <hr/>
+        
+            <!-- RESET DB -->
+            <h3><b>RESET DATABASE</b></h3>
+            <form action="reset_table/sort" method="post" enctype="multipart/form-data">
+                <input type="submit" name="" value="reset database"/>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const form_uploader = document.getElementById("form_uploader");
+        const algo_option = document.getElementById("algo_option");
+        const dummy_option = document.getElementById("dummy_option")
+        dummy_option.setAttribute('disabled',true)
+
+        function upload_handler(e){
+            const str = algo_option.value;
+            console.log(str);
+            const str_algo = str.substring(0,(str.length - 5)).toLowerCase();
+            console.log(str_algo);
+            form_uploader.attributes['action'].nodeValue = "sort/"+str_algo
+            console.log(form_uploader.attributes['action'])
+            alert("^ ^");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        section div {
+            width: 60%;
+        }
+        @media screen and (max-width: 480px) {
+            section div {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div>
+
+            <h3><b>Hasil Sorting</b></h3>
+            <a href="/">>>> HOME <<<</a>
+            <br/>
+            <h4><b>ID: </b>{{id_data}}</h4>
+            <h4><b>Waktu Eksekusi: </b>{{exec_time_in_ms}}  ms</h4>
+            <h4><b>Algoritme: </b>{{algorithm}}</h4>
+            <h4><b>Data</b></h4>
+            {{ sorted_data | safe}}
+        </div>
+    </section>
+</body>
+</html>
+
