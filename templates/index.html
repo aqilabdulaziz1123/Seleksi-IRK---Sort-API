@@ -24,6 +24,7 @@
 </head>
 <body>
     <section>
+        <h4><a href="/login">Login</a></h4>
 
         <div>
             <h1 id="page_title">
@@ -41,15 +42,16 @@
 
             <!-- UPLOADER -->
             <h3><b>UPLOADER</b></h3>
-            <form action="sort/selection" method="post" enctype="multipart/form-data">
+            <form id="form_uploader" action="sort/selection" onsubmit="upload_handler()" method="post" enctype="multipart/form-data">
                 <input type="file" name="csv_uploader" value=""/>
                 <input type="number" name="selected_column" value="0"/>
                 <select name="orientation">
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
-                <select name="algorithm">
+                <select id="algo_option" name="algorithm">
                     <option value="selection_sort">Selection Sort</option>
+                    <option value="bubble_sort">Bubble Sort</option>
                 </select>
                 <input type="submit" name="" value="submit"/>
             </form>
@@ -79,8 +81,20 @@
     </section>
 
     <script>
+        const form_uploader = document.getElementById("form_uploader");
+        const algo_option = document.getElementById("algo_option");
         const dummy_option = document.getElementById("dummy_option")
         dummy_option.setAttribute('disabled',true)
+
+        function upload_handler(e){
+            const str = algo_option.value;
+            console.log(str);
+            const str_algo = str.substring(0,(str.length - 5)).toLowerCase();
+            console.log(str_algo);
+            form_uploader.attributes['action'].nodeValue = "sort/"+str_algo
+            console.log(form_uploader.attributes['action'])
+            alert("^ ^");
+        }
     </script>
 </body>
 </html>

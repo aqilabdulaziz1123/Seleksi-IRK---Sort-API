@@ -57,3 +57,18 @@ Kalopun udh pull requests dan mau ngubah ngubah sebelum demo sok aja gapapa
 
 ## Contact Person
 Jika ada pertanyaan, buatlah issue github di repo ini lalu pc gw di line : aids.dragon
+
+### Cara Menjalankan
+- install python 3.x
+- jalankan setup database ```python3 setup.py``` atau ```python setup.py```
+- jalankan program ```python3 app.py```
+- buka http://localhost:5000
+- tekan tombol 'initialize'
+- pilih file di uploader, format mengikuti contoh testcase di directory ```/data```
+- pilih kolom relatif pengurutan
+- pilih jenis pengurutan ('asc' atau 'desc')
+- pilih algoritme
+- submit
+- untuk checking, pada section 'Show Result', pilih 'id data', lalu tekan 'get result'
+- database dapat di-reset dengan tombol 'reset database'
+- maaf atas bug-bug yang belum dibenahi 
